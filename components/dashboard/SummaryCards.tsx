@@ -36,20 +36,20 @@ export function SummaryCards() {
       amount: formatRupiah(summary.netProfit),
       href: '/keuangan',
       icon: Wallet,
-      bgGradient: 'from-white to-[#FFF8E1]',
-      borderColor: 'border-[#FFE082]',
-      iconBg: 'bg-[#FFECB3] text-[#E65100]',
-      accentColor: 'text-[#E65100]',
+      bgGradient: 'from-white to-[#FFF5F7]',
+      borderColor: 'border-[#F8BBD0]',
+      iconBg: 'bg-[#FFEBEF] text-[#C2185B]',
+      accentColor: 'text-[#C2185B]',
     },
     {
       title: 'Stok',
       amount: `${formatNumber(summary.readyProductsCount)} Pcs`,
       href: '/stok',
       icon: ShoppingBag,
-      bgGradient: 'from-white to-[#FFF3E0]',
-      borderColor: 'border-[#FFD54F]',
-      iconBg: 'bg-[#FFF3E0] text-[#D81B60]',
-      accentColor: 'text-[#D81B60]',
+      bgGradient: 'from-white to-[#FFEBEF]',
+      borderColor: 'border-[#F8BBD0]',
+      iconBg: 'bg-[#FFEBEF] text-[#C2185B]',
+      accentColor: 'text-[#C2185B]',
     },
   ];
 
@@ -65,7 +65,7 @@ export function SummaryCards() {
               transition={{ duration: 0.2, delay: idx * 0.04 }}
               whileHover={{ y: -2, scale: 1.01 }}
               whileTap={{ scale: 0.98 }}
-              className={`p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-gradient-to-br ${card.bgGradient} border border-[#EFE4DA] hover:${card.borderColor} text-[#3E2723] shadow-xs relative overflow-hidden transition-all duration-150 flex flex-col justify-between`}
+              className={`p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-gradient-to-br ${card.bgGradient} border border-[#F8BBD0] hover:${card.borderColor} text-[#311B1E] shadow-xs relative overflow-hidden transition-all duration-150 flex flex-col justify-between`}
             >
               <div className="flex items-center justify-between gap-1 mb-1">
                 <span className="text-[10px] sm:text-xs font-black uppercase tracking-wider text-[#6D4C41] truncate">

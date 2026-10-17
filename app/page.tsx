@@ -54,37 +54,37 @@ export default function LandingPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[url('/bg.png')] bg-cover bg-center bg-fixed bg-no-repeat text-[#3E2723] flex flex-col font-sans relative overflow-x-hidden selection:bg-[#FFB300]/30 selection:text-[#3E2723]">
-      {/* Warm ambient aura */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-gradient-to-b from-[#FCE4EC]/20 via-[#FFF3E0]/15 to-transparent blur-[100px] pointer-events-none" />
+    <div className="min-h-screen bg-[url('/bg.jpg')] bg-cover bg-center bg-fixed bg-no-repeat text-[#311B1E] flex flex-col font-sans relative overflow-x-hidden selection:bg-[#C2185B]/25 selection:text-[#311B1E]">
+      {/* Warm pink ambient aura */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[350px] bg-gradient-to-b from-[#FFEBEF]/40 via-[#FCE4EC]/30 to-transparent blur-[100px] pointer-events-none" />
 
       {/* Top Navbar with Store Logo */}
       <header className="w-full max-w-6xl mx-auto px-5 py-5 flex items-center justify-between z-10">
         <div className="flex items-center gap-3">
-          <div className="relative w-12 h-12 rounded-2xl overflow-hidden shadow-md shadow-[#3E2723]/10 border-2 border-[#FFB300]/50 bg-white p-0.5 shrink-0 transition-transform hover:scale-105">
+          <div className="relative w-12 h-12 rounded-full overflow-hidden shadow-md shadow-[#C2185B]/15 border-2 border-[#C2185B] bg-white p-0.5 shrink-0 transition-transform hover:scale-105">
             <Image
-              src="/logo.jpeg"
-              alt="Logo Dapoer Mamak"
+              src="/logo.png"
+              alt="Logo Kitchen Chaacake"
               width={48}
               height={48}
-              className="w-full h-full object-contain rounded-xl"
+              className="w-full h-full object-contain rounded-full"
               priority
             />
           </div>
           <div>
-            <span className="font-black text-[#3E2723] text-lg tracking-tight">Dapoer Mamak</span>
-            <span className="block text-[10px] text-[#D81B60] font-black uppercase tracking-wider">
-              Snack & Healthy Drink
+            <span className="font-black text-[#311B1E] text-lg tracking-tight">Kitchen Chaacake</span>
+            <span className="block text-[10px] text-[#C2185B] font-black uppercase tracking-wider">
+              Selamat Menikmati • Kerinci
             </span>
           </div>
         </div>
 
         <Link
           href="/login"
-          className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-white hover:bg-[#FFF3E0] border-2 border-[#EFE4DA] text-xs font-black text-[#3E2723] transition-all shadow-xs"
+          className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-white hover:bg-[#FFEBEF] border-2 border-[#F8BBD0] text-xs font-black text-[#311B1E] transition-all shadow-xs"
         >
           <span>Masuk Sistem</span>
-          <ArrowRight className="w-3.5 h-3.5 text-[#FFB300]" />
+          <ArrowRight className="w-3.5 h-3.5 text-[#C2185B]" />
         </Link>
       </header>
 
@@ -95,42 +95,42 @@ export default function LandingPage() {
           initial={{ scale: 0.85, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.4 }}
-          className="relative w-28 h-28 sm:w-32 sm:h-32 rounded-3xl overflow-hidden shadow-xl shadow-[#3E2723]/15 border-4 border-[#FFB300] bg-white p-1 mb-5"
+          className="relative w-32 h-32 sm:w-36 sm:h-36 rounded-full overflow-hidden shadow-xl shadow-[#C2185B]/20 border-4 border-[#C2185B] bg-white p-1 mb-5"
         >
           <Image
-            src="/logo.jpeg"
-            alt="Logo Dapoer Mamak"
-            width={128}
-            height={128}
-            className="w-full h-full object-contain rounded-2xl"
+            src="/logo.png"
+            alt="Logo Kitchen Chaacake"
+            width={144}
+            height={144}
+            className="w-full h-full object-contain rounded-full"
             priority
           />
         </motion.div>
 
         {/* Device pill badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFF3E0] border border-[#FFE0B2] text-[#3E2723] text-xs font-black mb-5 shadow-xs">
-          <Heart className="w-3.5 h-3.5 fill-[#D81B60] text-[#D81B60]" />
-          <span>Cooking With Love • Dioptimalkan untuk HP & Tablet</span>
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFEBEF] border border-[#F8BBD0] text-[#311B1E] text-xs font-black mb-5 shadow-xs">
+          <Heart className="w-3.5 h-3.5 fill-[#C2185B] text-[#C2185B]" />
+          <span>Selamat Menikmati • Dioptimalkan untuk HP & Tablet</span>
         </div>
 
         {/* Big Title */}
-        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-[#3E2723] tracking-tight max-w-3xl leading-[1.15]">
-          Dapoer Mamak <br />
-          <span className="bg-gradient-to-r from-[#FFB300] via-[#FFA000] to-[#E65100] bg-clip-text text-transparent">
+        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-[#311B1E] tracking-tight max-w-3xl leading-[1.15]">
+          Kitchen Chaacake <br />
+          <span className="bg-gradient-to-r from-[#C2185B] via-[#E91E63] to-[#AD1457] bg-clip-text text-transparent">
             Management System
           </span>
         </h1>
 
         {/* Slogan */}
         <p className="mt-4 text-sm sm:text-base lg:text-lg text-[#6D4C41] max-w-2xl leading-relaxed font-medium">
-          Sistem pembukuan toko roti privat: catat resep adonan, kontrol stok bahan baku, etalase roti siap saji, dan pantau laba bersih secara real-time.
+          Sistem manajemen cake & bakery privat: kontrol resep adonan, pantau stok bahan baku, etalase kue siap saji, dan pencatatan laba bersih otomatis.
         </p>
 
-        {/* CTA Buttons with Golden Ribbon Accent */}
+        {/* CTA Buttons with Rose Accent */}
         <div className="mt-8 flex flex-col sm:flex-row items-center gap-3.5 w-full sm:w-auto">
           <Link
             href="/login"
-            className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-9 py-3.5 rounded-3xl bg-gradient-to-r from-[#FFB300] to-[#FFA000] text-[#3E2723] font-black text-sm shadow-lg shadow-[#FFB300]/30 hover:brightness-105 active:scale-95 transition-all"
+            className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-9 py-3.5 rounded-3xl bg-gradient-to-r from-[#C2185B] to-[#D81B60] text-white font-black text-sm shadow-lg shadow-[#C2185B]/30 hover:brightness-105 active:scale-95 transition-all"
           >
             <span>Masuk ke Aplikasi</span>
             <ArrowRight className="w-4 h-4 stroke-[3]" />
@@ -138,26 +138,26 @@ export default function LandingPage() {
 
           <Link
             href="/dashboard"
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-7 py-3.5 rounded-3xl bg-white hover:bg-[#FFF3E0] border-2 border-[#EFE4DA] text-[#3E2723] font-black text-sm shadow-xs transition-all"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 px-7 py-3.5 rounded-3xl bg-white hover:bg-[#FFEBEF] border-2 border-[#F8BBD0] text-[#311B1E] font-black text-sm shadow-xs transition-all"
           >
             <span>Buka Dashboard Langsung</span>
           </Link>
         </div>
 
-        {/* Quick Credential Card */}
-        <div className="mt-6 p-3 px-5 rounded-2xl bg-white border border-[#EFE4DA] text-xs text-[#5D4037] flex items-center gap-2 shadow-xs">
+        {/* Protected System Card */}
+        <div className="mt-6 p-3 px-5 rounded-2xl bg-white border border-[#F8BBD0] text-xs text-[#5D4037] flex items-center gap-2 shadow-xs">
           <ShieldCheck className="w-4 h-4 text-[#2E7D32] shrink-0" />
-          <span>Akses Privat: Email: <strong className="text-[#3E2723]">dapurmamak@gmail.com</strong> • Sandi: <strong className="text-[#3E2723]">bismillah laku</strong></span>
+          <span>Akses Privat: Masuk menggunakan akun terdaftar di sistem database Kitchen Chaacake</span>
         </div>
 
         {/* Cara Kerja Sistem Per-Step */}
         <div className="mt-20 w-full text-left">
           <div className="text-center mb-10">
-            <h2 className="text-xl sm:text-2xl font-black text-[#3E2723] tracking-tight">
+            <h2 className="text-xl sm:text-2xl font-black text-[#311B1E] tracking-tight">
               Panduan Cara Kerja Sistem (4-Step)
             </h2>
-            <p className="text-xs sm:text-sm text-[#8D6E63] mt-1 max-w-lg mx-auto">
-              Empat tahapan otomatisasi bisnis dari pembelian tepung hingga pencatatan laba bersih toko.
+            <p className="text-xs sm:text-sm text-[#8D5B68] mt-1 max-w-lg mx-auto">
+              Empat tahapan otomatisasi bisnis dari pembelian bahan hingga pencatatan laba bersih toko.
             </p>
           </div>
 
@@ -167,11 +167,11 @@ export default function LandingPage() {
               return (
                 <div
                   key={st.num}
-                  className="p-6 rounded-3xl bg-white border-2 border-[#EFE4DA] hover:border-[#FFB300] shadow-md shadow-[#3E2723]/5 hover:shadow-xl hover:shadow-[#FFB300]/15 transition-all duration-300 flex flex-col justify-between group"
+                  className="p-6 rounded-3xl bg-white border-2 border-[#F8BBD0] hover:border-[#C2185B] shadow-md shadow-[#C2185B]/5 hover:shadow-xl hover:shadow-[#C2185B]/15 transition-all duration-300 flex flex-col justify-between group"
                 >
                   <div>
                     <div className="flex items-center justify-between mb-4">
-                      <span className="text-xs font-mono font-black text-[#A1887F] group-hover:text-[#FFB300] transition-colors">
+                      <span className="text-xs font-mono font-black text-[#A1887F] group-hover:text-[#C2185B] transition-colors">
                         STEP {st.num}
                       </span>
                       <span className={`text-[10px] font-black px-2.5 py-0.5 rounded-full border ${st.color}`}>
@@ -179,11 +179,11 @@ export default function LandingPage() {
                       </span>
                     </div>
 
-                    <div className="w-12 h-12 rounded-2xl bg-[#FAF7F2] flex items-center justify-center text-[#FFB300] mb-3 border border-[#EFE4DA]">
-                      <Icon className="w-6 h-6 text-[#3E2723]" />
+                    <div className="w-12 h-12 rounded-2xl bg-[#FFEBEF]/60 flex items-center justify-center text-[#C2185B] mb-3 border border-[#F8BBD0]">
+                      <Icon className="w-6 h-6 text-[#C2185B]" />
                     </div>
 
-                    <h3 className="font-black text-[#3E2723] text-base mb-2">
+                    <h3 className="font-black text-[#311B1E] text-base mb-2">
                       {st.title}
                     </h3>
 
@@ -192,9 +192,9 @@ export default function LandingPage() {
                     </p>
                   </div>
 
-                  <div className="pt-4 mt-4 border-t border-[#EFE4DA] flex items-center text-[11px] font-black text-[#FFB300] group-hover:translate-x-0.5 transition-transform">
-                    <span className="text-[#3E2723]">Lihat modul</span>
-                    <ArrowRight className="w-3.5 h-3.5 ml-1 text-[#FFB300]" />
+                  <div className="pt-4 mt-4 border-t border-[#F8BBD0] flex items-center text-[11px] font-black text-[#C2185B] group-hover:translate-x-0.5 transition-transform">
+                    <span className="text-[#311B1E]">Lihat modul</span>
+                    <ArrowRight className="w-3.5 h-3.5 ml-1 text-[#C2185B]" />
                   </div>
                 </div>
               );
@@ -203,13 +203,13 @@ export default function LandingPage() {
         </div>
 
         {/* Highlights */}
-        <div className="mt-16 w-full p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-[#FFF3E0] via-white to-[#FCE4EC] border-2 border-[#EFE4DA] text-left flex flex-col md:flex-row items-center justify-between gap-6 shadow-lg shadow-[#3E2723]/5">
+        <div className="mt-16 w-full p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-[#FFEBEF] via-white to-[#FFF5F7] border-2 border-[#F8BBD0] text-left flex flex-col md:flex-row items-center justify-between gap-6 shadow-lg shadow-[#C2185B]/5">
           <div className="space-y-2">
-            <h3 className="text-lg font-black text-[#3E2723]">Dirancang Sempurna untuk Dapur & Meja Kasir</h3>
+            <h3 className="text-lg font-black text-[#311B1E]">Dirancang Sempurna untuk Dapur & Meja Kasir</h3>
             <p className="text-xs sm:text-sm text-[#5D4037] max-w-xl leading-relaxed">
-              Tombol kuning emas empuk mudah dijangkau ibu jari, kartu pastel yang menenangkan mata saat di dapur, dan penyimpanan data aman 100% lokal.
+              Tombol rose magenta elegan yang mudah dijangkau ibu jari, kartu pastel yang menenangkan mata saat di dapur, dan penyimpanan data tersinkronisasi 100% ke Supabase.
             </p>
-            <div className="flex flex-wrap items-center gap-4 pt-2 text-xs font-black text-[#3E2723]">
+            <div className="flex flex-wrap items-center gap-4 pt-2 text-xs font-black text-[#311B1E]">
               <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-[#2E7D32]" /> Kategori Kustom Fleksibel</span>
               <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-[#2E7D32]" /> Cepat Tanpa Loading Berat</span>
               <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-[#2E7D32]" /> 100% Privat untuk Toko</span>
@@ -218,7 +218,7 @@ export default function LandingPage() {
 
           <Link
             href="/login"
-            className="shrink-0 px-7 py-3.5 rounded-3xl bg-gradient-to-r from-[#FFB300] to-[#FFA000] text-[#3E2723] font-black text-xs flex items-center gap-2 shadow-md shadow-[#FFB300]/30 hover:brightness-105 transition-all"
+            className="shrink-0 px-7 py-3.5 rounded-3xl bg-gradient-to-r from-[#C2185B] to-[#D81B60] text-white font-black text-xs flex items-center gap-2 shadow-md shadow-[#C2185B]/30 hover:brightness-105 transition-all"
           >
             <span>Buka Dapur Sekarang</span>
             <ArrowRight className="w-4 h-4" />
@@ -227,8 +227,8 @@ export default function LandingPage() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full border-t border-[#EFE4DA] py-6 text-center text-xs text-[#8D6E63]">
-        <p>© 2026 Dapoer Mamak Management System • Snack & Healthy Drink</p>
+      <footer className="w-full border-t border-[#F8BBD0] py-6 text-center text-xs text-[#8D5B68]">
+        <p>© 2026 Kitchen Chaacake Management System • Selamat Menikmati • Kerinci, Jambi</p>
       </footer>
     </div>
   );

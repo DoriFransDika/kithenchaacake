@@ -45,7 +45,7 @@ const STATUS_STYLE = {
     Icon: AlertTriangle,
   },
   safe: {
-    card: 'border-[#EFE4DA] bg-white/95',
+    card: 'border-[#F8BBD0] bg-white/95',
     badge: 'bg-emerald-100 text-emerald-800 border-emerald-200',
     stock: 'text-[#2E7D32]',
     label: 'Tersedia',
@@ -56,16 +56,16 @@ const STATUS_STYLE = {
 export function ReadyProductList({ products, categories, onEdit, onDelete, onAdd }: ReadyProductListProps) {
   if (products.length === 0) {
     return (
-      <div className="p-8 sm:p-12 text-center rounded-3xl bg-white/90 backdrop-blur-md border border-[#EFE4DA]">
+      <div className="p-8 sm:p-12 text-center rounded-3xl bg-white/90 backdrop-blur-md border border-[#F8BBD0]">
         <Sparkles className="w-12 h-12 text-[#BCAAA4] mx-auto mb-3 opacity-60" />
-        <h3 className="font-black text-[#3E2723] text-base">Belum ada produk ready yang cocok</h3>
-        <p className="text-xs text-[#8D6E63] mt-1">
+        <h3 className="font-black text-[#311B1E] text-base">Belum ada produk ready yang cocok</h3>
+        <p className="text-xs text-[#8D5B68] mt-1">
           Input stok produk ready baru atau sesuaikan filter kategori / status.
         </p>
         <button
           type="button"
           onClick={onAdd}
-          className="mt-4 px-4 py-2 rounded-2xl bg-gradient-to-r from-[#FFB300] to-[#FFA000] text-[#3E2723] text-xs font-black shadow-md shadow-[#FFB300]/25 active:scale-95 transition-all"
+          className="mt-4 px-4 py-2 rounded-2xl bg-gradient-to-r from-[#C2185B] to-[#D81B60] text-white text-xs font-black shadow-md shadow-[#C2185B]/25 active:scale-95 transition-all"
         >
           + Input Produk Ready
         </button>
@@ -104,7 +104,7 @@ export function ReadyProductList({ products, categories, onEdit, onDelete, onAdd
                       type="button"
                       id={`edit-ready-${p.id}`}
                       onClick={() => onEdit(p)}
-                      className="p-1 rounded-md text-[#8D6E63] hover:text-[#3E2723] hover:bg-stone-100"
+                      className="p-1 rounded-md text-[#8D5B68] hover:text-[#311B1E] hover:bg-[#FFEBEF]"
                       title="Ubah Produk"
                     >
                       <Edit2 className="w-3 h-3" />
@@ -113,7 +113,7 @@ export function ReadyProductList({ products, categories, onEdit, onDelete, onAdd
                       type="button"
                       id={`delete-ready-${p.id}`}
                       onClick={() => onDelete(p)}
-                      className="p-1 rounded-md text-[#8D6E63] hover:text-rose-600 hover:bg-rose-50"
+                      className="p-1 rounded-md text-[#8D5B68] hover:text-rose-600 hover:bg-rose-50"
                       title="Hapus Produk"
                     >
                       <Trash2 className="w-3 h-3" />
@@ -121,29 +121,29 @@ export function ReadyProductList({ products, categories, onEdit, onDelete, onAdd
                   </div>
                 </div>
 
-                <h3 className="font-black text-[#3E2723] text-sm sm:text-base mt-2 truncate" title={p.name}>
+                <h3 className="font-black text-[#311B1E] text-sm sm:text-base mt-2 truncate" title={p.name}>
                   {p.name}
                 </h3>
 
-                <div className="mt-2 p-2.5 rounded-xl bg-[#FAF7F2] border border-[#EFE4DA]">
-                  <span className="text-[9px] sm:text-[10px] uppercase font-bold text-[#8D6E63] block">
+                <div className="mt-2 p-2.5 rounded-xl bg-[#FFEBEF]/40 border border-[#F8BBD0]">
+                  <span className="text-[9px] sm:text-[10px] uppercase font-bold text-[#8D5B68] block">
                     Stok Saat Ini
                   </span>
                   <p className={`text-lg sm:text-2xl font-black mt-0.5 ${style.stock}`}>
-                    {p.stock} <span className="text-xs font-semibold text-[#8D6E63]">pcs</span>
+                    {p.stock} <span className="text-xs font-semibold text-[#8D5B68]">pcs</span>
                   </p>
-                  <span className="text-[9px] text-[#A1887F] font-semibold">Min. {p.minStock} pcs</span>
+                  <span className="text-[9px] text-[#8D5B68] font-semibold">Min. {p.minStock} pcs</span>
                 </div>
               </div>
 
-              <div className="mt-2.5 pt-2 border-t border-[#EFE4DA]/80 flex items-center justify-between gap-1">
+              <div className="mt-2.5 pt-2 border-t border-[#F8BBD0]/80 flex items-center justify-between gap-1">
                 <span
                   className={`text-[9px] sm:text-[10px] font-black px-2 py-0.5 rounded-full border flex items-center gap-1 ${style.badge}`}
                 >
                   <style.Icon className="w-3 h-3" />
                   {style.label}
                 </span>
-                <span className="text-[9px] text-[#A1887F] font-medium text-right leading-tight">
+                <span className="text-[9px] text-[#8D5B68] font-medium text-right leading-tight">
                   Keluar via transaksi
                 </span>
               </div>

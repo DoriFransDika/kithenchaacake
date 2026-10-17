@@ -116,25 +116,25 @@ export function CategoryManageModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-stone-900/40 backdrop-blur-sm animate-in fade-in duration-150">
-      <div className="bg-white border-2 border-[#EFE4DA] rounded-2xl sm:rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl flex flex-col max-h-[92vh]">
+      <div className="bg-white border-2 border-[#F8BBD0] rounded-2xl sm:rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl flex flex-col max-h-[92vh]">
         {/* Modal Header */}
-        <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-[#EFE4DA] flex items-center justify-between bg-gradient-to-r from-[#FFFDF9] to-white">
+        <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-[#F8BBD0] flex items-center justify-between bg-gradient-to-r from-[#FFF5F7] to-white">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-[#FFF3E0] text-[#FFB300] flex items-center justify-center border border-[#FFE0B2]">
-              <Tags className="w-4 h-4 text-[#3E2723]" />
+            <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-[#FFEBEF] text-[#C2185B] flex items-center justify-center border border-[#F8BBD0]">
+              <Tags className="w-4 h-4 text-[#C2185B]" />
             </div>
             <div>
-              <h3 className="font-black text-[#3E2723] text-sm sm:text-base">
+              <h3 className="font-black text-[#311B1E] text-sm sm:text-base">
                 Kelola Kategori Interaktif
               </h3>
-              <p className="text-[10px] sm:text-xs text-[#8D6E63]">
+              <p className="text-[10px] sm:text-xs text-[#8D5B68]">
                 Atur ikon dompet digital dan warna pastel kategori toko
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#FAF7F2] hover:bg-[#FFF3E0] text-[#6D4C41] flex items-center justify-center"
+            className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#FFEBEF] hover:bg-[#F8BBD0]/50 text-[#8D5B68] flex items-center justify-center"
           >
             <X className="w-4 h-4" />
           </button>
@@ -149,8 +149,8 @@ export function CategoryManageModal({
         )}
 
         {/* Tab & New Category Button */}
-        <div className="p-3 sm:p-4 bg-stone-50/70 border-b border-[#EFE4DA] flex items-center justify-between gap-2">
-          <div className="flex items-center p-1 bg-white rounded-xl border border-[#EFE4DA] text-xs">
+        <div className="p-3 sm:p-4 bg-[#FFEBEF]/20 border-b border-[#F8BBD0] flex items-center justify-between gap-2">
+          <div className="flex items-center p-1 bg-white rounded-xl border border-[#F8BBD0] text-xs">
             <button
               type="button"
               onClick={() => {
@@ -158,7 +158,7 @@ export function CategoryManageModal({
                 setIsFormOpen(false);
               }}
               className={`px-3 py-1.5 rounded-lg font-bold transition-all text-[11px] ${
-                activeTab === 'material' ? 'bg-[#FFB300] text-[#3E2723] shadow-xs' : 'text-[#8D6E63]'
+                activeTab === 'material' ? 'bg-[#C2185B] text-white shadow-xs' : 'text-[#8D5B68]'
               }`}
             >
               Bahan Baku Dapur
@@ -170,7 +170,7 @@ export function CategoryManageModal({
                 setIsFormOpen(false);
               }}
               className={`px-3 py-1.5 rounded-lg font-bold transition-all text-[11px] ${
-                activeTab === 'product' ? 'bg-[#FFB300] text-[#3E2723] shadow-xs' : 'text-[#8D6E63]'
+                activeTab === 'product' ? 'bg-[#C2185B] text-white shadow-xs' : 'text-[#8D5B68]'
               }`}
             >
               Produk Roti
@@ -180,7 +180,7 @@ export function CategoryManageModal({
           <button
             type="button"
             onClick={handleOpenAdd}
-            className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#FFB300] to-[#FFA000] text-[#3E2723] text-xs font-black flex items-center gap-1 shadow-xs hover:brightness-105 active:scale-95 transition-all"
+            className="px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#C2185B] to-[#D81B60] text-white text-xs font-black flex items-center gap-1 shadow-xs hover:brightness-105 active:scale-95 transition-all"
           >
             <Plus className="w-3.5 h-3.5 stroke-[3]" />
             <span>+ Kategori Baru</span>
@@ -188,19 +188,19 @@ export function CategoryManageModal({
         </div>
 
         {/* Body Content */}
-        <div className="p-3 sm:p-5 overflow-y-auto space-y-3.5 flex-1 bg-[#FAF7F2]">
+        <div className="p-3 sm:p-5 overflow-y-auto space-y-3.5 flex-1 bg-[#FFEBEF]/20">
           {/* Form Mode (Add or Edit) */}
           {isFormOpen ? (
-            <form onSubmit={handleSave} className="p-3.5 sm:p-4 bg-white rounded-2xl border-1.5 border-[#FFB300] shadow-sm space-y-3">
-              <div className="flex items-center justify-between pb-2 border-b border-[#EFE4DA]">
-                <span className="text-xs font-black text-[#3E2723] flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-[#FFB300]" />
+            <form onSubmit={handleSave} className="p-3.5 sm:p-4 bg-white rounded-2xl border-1.5 border-[#F8BBD0] shadow-sm space-y-3">
+              <div className="flex items-center justify-between pb-2 border-b border-[#F8BBD0]">
+                <span className="text-xs font-black text-[#311B1E] flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-[#C2185B]" />
                   {editingCategory ? 'Ubah Kategori' : 'Buat Kategori Baru'}
                 </span>
                 <button
                   type="button"
                   onClick={() => setIsFormOpen(false)}
-                  className="text-[11px] text-[#8D6E63] hover:text-[#3E2723] font-bold"
+                  className="text-[11px] text-[#8D5B68] hover:text-[#311B1E] font-bold"
                 >
                   Batal
                 </button>
@@ -208,7 +208,7 @@ export function CategoryManageModal({
 
               {/* Tipe Kategori */}
               <div>
-                <label className="block text-[11px] font-bold text-[#3E2723] mb-1">Tipe Kategori</label>
+                <label className="block text-[11px] font-bold text-[#311B1E] mb-1">Tipe Kategori</label>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
@@ -220,8 +220,8 @@ export function CategoryManageModal({
                     }}
                     className={`py-2 px-3 rounded-xl border text-xs font-bold transition-all ${
                       type === 'material'
-                        ? 'bg-[#FFF3E0] border-[#FFB300] text-[#3E2723] shadow-2xs font-black'
-                        : 'bg-[#FAF7F2] border-[#EFE4DA] text-[#8D6E63]'
+                        ? 'bg-[#FFEBEF] border-[#C2185B] text-[#C2185B] shadow-2xs font-black'
+                        : 'bg-white border-[#F8BBD0] text-[#8D5B68]'
                     }`}
                   >
                     Bahan Baku Dapur
@@ -236,8 +236,8 @@ export function CategoryManageModal({
                     }}
                     className={`py-2 px-3 rounded-xl border text-xs font-bold transition-all ${
                       type === 'product'
-                        ? 'bg-[#FFF3E0] border-[#FFB300] text-[#3E2723] shadow-2xs font-black'
-                        : 'bg-[#FAF7F2] border-[#EFE4DA] text-[#8D6E63]'
+                        ? 'bg-[#FFEBEF] border-[#C2185B] text-[#C2185B] shadow-2xs font-black'
+                        : 'bg-white border-[#F8BBD0] text-[#8D5B68]'
                     }`}
                   >
                     Produk Roti
@@ -248,8 +248,8 @@ export function CategoryManageModal({
               {/* Jenis Satuan Kategori (Khusus Bahan Baku) */}
               {type === 'material' && (
                 <div>
-                  <label className="block text-[11px] font-bold text-[#3E2723] mb-1">
-                    Jenis Satuan Kategori <span className="text-amber-700 font-normal">(basis satuan persediaan)</span>
+                  <label className="block text-[11px] font-bold text-[#311B1E] mb-1">
+                    Jenis Satuan Kategori <span className="text-[#C2185B] font-normal">(basis satuan persediaan)</span>
                   </label>
                   <div className="grid grid-cols-3 gap-2">
                     <button
@@ -257,15 +257,15 @@ export function CategoryManageModal({
                       onClick={() => setUnitGroup('weight')}
                       className={`p-2.5 rounded-xl border text-left flex flex-col justify-between transition-all ${
                         unitGroup === 'weight'
-                          ? 'bg-[#FFF3E0] border-[#FFB300] ring-1 ring-[#FFB300] text-[#3E2723]'
-                          : 'bg-[#FAF7F2] border-[#EFE4DA] text-[#6D4C41] hover:bg-white'
+                          ? 'bg-[#FFEBEF] border-[#C2185B] ring-1 ring-[#C2185B] text-[#311B1E]'
+                          : 'bg-white border-[#F8BBD0] text-[#8D5B68] hover:bg-[#FFEBEF]/40'
                       }`}
                     >
                       <div className="flex items-center gap-1.5 font-black text-xs">
-                        <Scale className="w-3.5 h-3.5 text-[#E65100]" />
+                        <Scale className="w-3.5 h-3.5 text-[#C2185B]" />
                         <span>Berat</span>
                       </div>
-                      <span className="text-[9.5px] text-[#8D6E63] mt-1 font-medium leading-tight">
+                      <span className="text-[9.5px] text-[#8D5B68] mt-1 font-medium leading-tight">
                         Default basis: gram / kg
                       </span>
                     </button>
@@ -275,8 +275,8 @@ export function CategoryManageModal({
                       onClick={() => setUnitGroup('volume')}
                       className={`p-2.5 rounded-xl border text-left flex flex-col justify-between transition-all ${
                         unitGroup === 'volume'
-                          ? 'bg-[#FFF3E0] border-[#FFB300] ring-1 ring-[#FFB300] text-[#3E2723]'
-                          : 'bg-[#FAF7F2] border-[#EFE4DA] text-[#6D4C41] hover:bg-white'
+                          ? 'bg-[#FFEBEF] border-[#C2185B] ring-1 ring-[#C2185B] text-[#311B1E]'
+                          : 'bg-white border-[#F8BBD0] text-[#8D5B68] hover:bg-[#FFEBEF]/40'
                       }`}
                     >
                       <div className="flex items-center gap-1.5 font-black text-xs">
@@ -293,15 +293,15 @@ export function CategoryManageModal({
                       onClick={() => setUnitGroup('count')}
                       className={`p-2.5 rounded-xl border text-left flex flex-col justify-between transition-all ${
                         unitGroup === 'count'
-                          ? 'bg-[#FFF3E0] border-[#FFB300] ring-1 ring-[#FFB300] text-[#3E2723]'
-                          : 'bg-[#FAF7F2] border-[#EFE4DA] text-[#6D4C41] hover:bg-white'
+                          ? 'bg-[#FFEBEF] border-[#C2185B] ring-1 ring-[#C2185B] text-[#311B1E]'
+                          : 'bg-white border-[#F8BBD0] text-[#8D5B68] hover:bg-[#FFEBEF]/40'
                       }`}
                     >
                       <div className="flex items-center gap-1.5 font-black text-xs">
                         <Package className="w-3.5 h-3.5 text-amber-700" />
                         <span>Unit / Hitung</span>
                       </div>
-                      <span className="text-[9.5px] text-[#8D6E63] mt-1 font-medium leading-tight">
+                      <span className="text-[9.5px] text-[#8D5B68] mt-1 font-medium leading-tight">
                         Default basis: pcs / kaleng / botol / kotak
                       </span>
                     </button>
@@ -310,23 +310,23 @@ export function CategoryManageModal({
               )}
 
               <div>
-                <label className="block text-[11px] font-bold text-[#3E2723] mb-1">Nama Kategori</label>
+                <label className="block text-[11px] font-bold text-[#311B1E] mb-1">Nama Kategori</label>
                 <input
                   type="text"
                   required
                   placeholder={type === 'material' ? 'Contoh: Tepung & Gandum' : 'Contoh: Roti Manis & Sobek'}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-[#FAF7F2] border border-[#EFE4DA] focus:border-[#FFB300] rounded-xl px-3 py-1.5 text-xs text-[#3E2723] font-bold focus:outline-none"
+                  className="w-full bg-white border border-[#F8BBD0] focus:border-[#C2185B] rounded-xl px-3 py-1.5 text-xs text-[#311B1E] font-bold focus:outline-none"
                 />
               </div>
 
               {/* Icon Selector (Khusus Bahan Baku atau Khusus Produk) */}
               <div>
-                <label className="block text-[11px] font-bold text-[#3E2723] mb-1">
+                <label className="block text-[11px] font-bold text-[#311B1E] mb-1">
                   Pilih Ikon Visual {type === 'material' ? '(Bahan Baku)' : '(Produk Jadi)'}
                 </label>
-                <div className="grid grid-cols-7 gap-1.5 max-h-24 overflow-y-auto p-1.5 bg-[#FAF7F2] rounded-xl border border-[#EFE4DA]">
+                <div className="grid grid-cols-7 gap-1.5 max-h-24 overflow-y-auto p-1.5 bg-white rounded-xl border border-[#F8BBD0]">
                   {(type === 'material' ? MATERIAL_CATEGORY_ICONS : PRODUCT_CATEGORY_ICONS).map((iconItem) => {
                     const isSelected = iconName.toLowerCase() === iconItem.name.toLowerCase();
                     const IconComp = iconItem.icon;
@@ -337,8 +337,8 @@ export function CategoryManageModal({
                         onClick={() => setIconName(iconItem.name)}
                         className={`p-1.5 rounded-lg flex flex-col items-center justify-center transition-all ${
                           isSelected
-                            ? 'bg-[#FFB300] text-[#3E2723] shadow-xs scale-105'
-                            : 'bg-white text-[#6D4C41] hover:bg-stone-100 border border-[#EFE4DA]'
+                            ? 'bg-[#C2185B] text-white shadow-xs scale-105'
+                            : 'bg-white text-[#8D5B68] hover:bg-[#FFEBEF] border border-[#F8BBD0]'
                         }`}
                         title={iconItem.label}
                       >
@@ -351,10 +351,10 @@ export function CategoryManageModal({
 
               {/* Color Preset Selector (E-Wallet Style Pastel Circles without confusing text) */}
               <div>
-                <label className="block text-[11px] font-bold text-[#3E2723] mb-1.5">
+                <label className="block text-[11px] font-bold text-[#311B1E] mb-1.5">
                   Warna Latar Pastel (Gaya Dompet Digital)
                 </label>
-                <div className="grid grid-cols-6 gap-2 p-2 bg-[#FAF7F2] rounded-xl border border-[#EFE4DA]">
+                <div className="grid grid-cols-6 gap-2 p-2 bg-white rounded-xl border border-[#F8BBD0]">
                   {CATEGORY_COLOR_PRESETS.map((p) => {
                     const isSelected = selectedColorPreset.id === p.id;
                     return (
@@ -364,12 +364,12 @@ export function CategoryManageModal({
                         onClick={() => setSelectedColorPreset(p)}
                         className={`h-8 rounded-xl flex items-center justify-center transition-all ${p.bg} ${
                           isSelected
-                            ? 'ring-2 ring-offset-1 ring-[#3E2723] scale-105 shadow-xs border border-white'
+                            ? 'ring-2 ring-offset-1 ring-[#C2185B] scale-105 shadow-xs border border-white'
                             : 'border border-black/5 hover:scale-105'
                         }`}
                         title={p.id}
                       >
-                        {isSelected && <Check className="w-3.5 h-3.5 text-[#3E2723] stroke-[3]" />}
+                        {isSelected && <Check className="w-3.5 h-3.5 text-[#311B1E] stroke-[3]" />}
                       </button>
                     );
                   })}
@@ -378,7 +378,7 @@ export function CategoryManageModal({
 
               {/* Batas Kritis atau Keterangan */}
               <div>
-                <label className="block text-[11px] font-bold text-[#3E2723] mb-1">
+                <label className="block text-[11px] font-bold text-[#311B1E] mb-1">
                   {type === 'material' ? 'Batas Kritis / Catatan Kategori' : 'Keterangan Kategori'}
                 </label>
                 <input
@@ -390,7 +390,7 @@ export function CategoryManageModal({
                   }
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                  className="w-full bg-[#FAF7F2] border border-[#EFE4DA] focus:border-[#FFB300] rounded-xl px-3 py-1.5 text-xs text-[#3E2723] font-medium focus:outline-none"
+                  className="w-full bg-white border border-[#F8BBD0] focus:border-[#C2185B] rounded-xl px-3 py-1.5 text-xs text-[#311B1E] font-medium focus:outline-none"
                 />
               </div>
 
@@ -398,13 +398,13 @@ export function CategoryManageModal({
                 <button
                   type="button"
                   onClick={() => setIsFormOpen(false)}
-                  className="px-3 py-1.5 rounded-xl bg-stone-100 text-[#6D4C41] text-xs font-bold"
+                  className="px-3 py-1.5 rounded-xl bg-stone-100 text-[#8D5B68] text-xs font-bold"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-1.5 rounded-xl bg-gradient-to-r from-[#FFB300] to-[#FFA000] text-[#3E2723] text-xs font-black shadow-xs"
+                  className="px-4 py-1.5 rounded-xl bg-gradient-to-r from-[#C2185B] to-[#D81B60] text-white text-xs font-black shadow-xs"
                 >
                   Simpan Kategori
                 </button>
@@ -414,7 +414,7 @@ export function CategoryManageModal({
             /* Category List View */
             <div className="space-y-2">
               {currentCategories.length === 0 ? (
-                <div className="text-center py-8 text-xs text-[#8D6E63]">
+                <div className="text-center py-8 text-xs text-[#8D5B68]">
                   Belum ada kategori untuk tipe ini. Klik &quot;+ Kategori&quot; untuk menambahkan.
                 </div>
               ) : (
@@ -424,7 +424,7 @@ export function CategoryManageModal({
                   return (
                     <div
                       key={cat.id}
-                      className="p-2.5 sm:p-3 rounded-xl bg-white border border-[#EFE4DA] flex items-center justify-between gap-2.5 hover:border-[#FFB300] transition-all"
+                      className="p-2.5 sm:p-3 rounded-xl bg-white border border-[#F8BBD0] flex items-center justify-between gap-2.5 hover:border-[#C2185B] transition-all"
                     >
                       <div className="flex items-center gap-2.5 min-w-0">
                         <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${cat.bgColor} ${cat.textColor} shrink-0 border border-black/5`}>
@@ -432,14 +432,14 @@ export function CategoryManageModal({
                         </div>
                         <div className="min-w-0">
                           <div className="flex items-center gap-1.5">
-                            <p className="font-black text-xs text-[#3E2723] truncate">{cat.name}</p>
+                            <p className="font-black text-xs text-[#311B1E] truncate">{cat.name}</p>
                             {cat.type === 'material' && (
-                              <span className="text-[9px] font-black px-1.5 py-0.2 rounded-md bg-[#FFF3E0] text-[#E65100] border border-[#FFE0B2] shrink-0">
+                              <span className="text-[9px] font-black px-1.5 py-0.2 rounded-md bg-[#FFEBEF] text-[#C2185B] border border-[#F8BBD0] shrink-0">
                                 {uGroup === 'weight' ? '⚖️ Berat' : uGroup === 'volume' ? '🥛 Volume' : '📦 Unit'}
                               </span>
                             )}
                           </div>
-                          <p className="text-[10px] text-[#8D6E63] truncate">
+                          <p className="text-[10px] text-[#8D5B68] truncate">
                             {cleanCategoryDescription(cat.description) || uConfig.desc}
                           </p>
                         </div>
@@ -449,7 +449,7 @@ export function CategoryManageModal({
                         <button
                           type="button"
                           onClick={() => handleOpenEdit(cat)}
-                          className="p-1.5 rounded-lg bg-stone-100 hover:bg-[#FFF3E0] text-[#6D4C41] hover:text-[#3E2723]"
+                          className="p-1.5 rounded-lg bg-stone-100 hover:bg-[#FFEBEF] text-[#8D5B68] hover:text-[#C2185B]"
                           title="Edit Kategori"
                         >
                           <Edit2 className="w-3.5 h-3.5" />
@@ -457,7 +457,7 @@ export function CategoryManageModal({
                         <button
                           type="button"
                           onClick={() => handleDelete(cat)}
-                          className="p-1.5 rounded-lg bg-stone-100 hover:bg-rose-50 text-[#6D4C41] hover:text-rose-600"
+                          className="p-1.5 rounded-lg bg-stone-100 hover:bg-rose-50 text-[#8D5B68] hover:text-rose-600"
                           title="Hapus Kategori"
                         >
                           <Trash2 className="w-3.5 h-3.5" />

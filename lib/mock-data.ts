@@ -270,7 +270,7 @@ export const INITIAL_FINISHED_PRODUCTS: FinishedProduct[] = [
   },
   {
     id: 'prod-3',
-    name: 'Roti Sobek Keju Susu Mamak',
+    name: 'Roti Sobek Keju Susu Chaacake',
     categoryId: 'cat-prod-3',
     category: 'Roti Sobek Keluarga',
     stock: 6, // Low stock alert

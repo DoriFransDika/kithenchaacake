@@ -187,27 +187,27 @@ export function ItemModal({ isOpen, onClose, mode, itemToEdit, onSuccess }: Item
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in">
-      <div className="bg-white border-2 border-[#EFE4DA] rounded-3xl w-full max-w-md shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="bg-white border-2 border-[#F8BBD0] rounded-3xl w-full max-w-md shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="p-5 border-b border-[#EFE4DA] flex items-center justify-between bg-gradient-to-r from-[#FFFDF9] to-[#FFF3E0]/40">
+        <div className="p-5 border-b border-[#F8BBD0] flex items-center justify-between bg-gradient-to-r from-[#FFF5F7] to-[#FFEBEF]/40">
           <div className="flex items-center gap-3">
-            <span className="p-2.5 rounded-2xl bg-[#FFB300] text-[#3E2723] shadow-xs">
+            <span className="p-2.5 rounded-2xl bg-[#FFEBEF] text-[#C2185B] border border-[#F8BBD0] shadow-xs">
               {isMaterial ? <Boxes className="w-5 h-5" /> : <Croissant className="w-5 h-5" />}
             </span>
             <div>
-              <h3 className="font-black text-lg text-[#3E2723]">
+              <h3 className="font-black text-lg text-[#311B1E]">
                 {isEditing
                   ? isMaterial ? 'Ubah Rincian Bahan' : 'Ubah Produk Ready'
                   : isMaterial ? 'Tambah Stok Bahan Baku' : 'Input Stok Produk Ready'}
               </h3>
-              <p className="text-xs text-[#8D6E63] font-medium">
+              <p className="text-xs text-[#8D5B68] font-medium">
                 {isMaterial ? 'Catat belanja bahan dapur & simpan pengeluaran kas' : 'Stok keluar otomatis saat transaksi di Keuangan Toko'}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-[#8D6E63] hover:text-[#3E2723] hover:bg-stone-100 transition-colors"
+            className="p-2 rounded-xl text-[#8D5B68] hover:text-[#311B1E] hover:bg-[#FFEBEF] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -217,7 +217,7 @@ export function ItemModal({ isOpen, onClose, mode, itemToEdit, onSuccess }: Item
         <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-4 flex-1">
           {/* Pilihan Kategori */}
           <div>
-            <label className="block text-xs font-black text-[#3E2723] mb-1.5">
+            <label className="block text-xs font-black text-[#311B1E] mb-1.5">
               Pilihan Kategori {isMaterial ? 'Bahan Baku' : 'Produk'}
             </label>
             {availableCategories.length === 0 ? (
@@ -226,7 +226,7 @@ export function ItemModal({ isOpen, onClose, mode, itemToEdit, onSuccess }: Item
                 <strong>Kelola Kategori</strong>.
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-2 max-h-36 overflow-y-auto p-1 bg-[#FAF7F2] rounded-2xl border border-[#EFE4DA]">
+              <div className="grid grid-cols-2 gap-2 max-h-36 overflow-y-auto p-1 bg-[#FFEBEF]/40 rounded-2xl border border-[#F8BBD0]">
                 {availableCategories.map((c) => {
                   const isSelected = categoryId === c.id;
                   return (
@@ -235,8 +235,8 @@ export function ItemModal({ isOpen, onClose, mode, itemToEdit, onSuccess }: Item
                       type="button"
                       onClick={() => handleSelectCategory(c.id)}
                       className={`p-2 rounded-xl border text-xs font-bold flex items-center gap-2 transition-all ${isSelected
-                          ? 'border-[#FFB300] bg-[#FFECB3] text-[#3E2723] shadow-xs'
-                          : 'border-[#EFE4DA] bg-white text-[#6D4C41] hover:bg-white/80'
+                          ? 'border-[#C2185B] bg-[#FFEBEF] text-[#C2185B] shadow-xs'
+                          : 'border-[#F8BBD0] bg-white text-[#8D5B68] hover:bg-white/80'
                         }`}
                     >
                       <CategoryIcon name={c.iconName} className="w-4 h-4 shrink-0" />
@@ -250,10 +250,10 @@ export function ItemModal({ isOpen, onClose, mode, itemToEdit, onSuccess }: Item
 
           {/* Nama Merek / Barang */}
           <div>
-            <label className="block text-xs font-black text-[#3E2723] mb-1.5 flex items-center justify-between">
+            <label className="block text-xs font-black text-[#311B1E] mb-1.5 flex items-center justify-between">
               <span>{isMaterial ? 'Nama Merek / Bahan' : 'Nama Produk'} <span className="text-rose-600">*</span></span>
               {isMaterial && (
-                <span className="text-[10px] text-[#8D6E63] font-medium">Misal: Cakra Kembar, Segitiga Biru, Gulaku</span>
+                <span className="text-[10px] text-[#8D5B68] font-medium">Misal: Cakra Kembar, Segitiga Biru, Gulaku</span>
               )}
             </label>
             <input
@@ -262,7 +262,7 @@ export function ItemModal({ isOpen, onClose, mode, itemToEdit, onSuccess }: Item
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder={isMaterial ? 'Contoh: Tepung Segitiga Biru, Ragi Saf-Instant' : 'Contoh: Roti Coklat Keju'}
-              className="w-full bg-[#FAF7F2] border-2 border-[#EFE4DA] focus:border-[#FFB300] rounded-2xl px-4 py-2.5 text-xs text-[#3E2723] font-bold focus:outline-none placeholder-[#A1887F]"
+              className="w-full bg-[#FFEBEF]/40 border-2 border-[#F8BBD0] focus:border-[#C2185B] rounded-2xl px-4 py-2.5 text-xs text-[#311B1E] font-bold focus:outline-none placeholder-[#8D5B68]"
             />
           </div>
 
@@ -271,7 +271,7 @@ export function ItemModal({ isOpen, onClose, mode, itemToEdit, onSuccess }: Item
             <div className="space-y-1.5">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-black text-[#3E2723] mb-1">
+                  <label className="block text-xs font-black text-[#311B1E] mb-1">
                     Jumlah Stok
                   </label>
                   <input
@@ -280,17 +280,17 @@ export function ItemModal({ isOpen, onClose, mode, itemToEdit, onSuccess }: Item
                     step="any"
                     value={stock}
                     onChange={(e) => setStock(e.target.value)}
-                    className="w-full bg-[#FAF7F2] border-2 border-[#EFE4DA] focus:border-[#FFB300] rounded-2xl px-3 py-2 text-xs text-[#3E2723] font-bold focus:outline-none"
+                    className="w-full bg-[#FFEBEF]/40 border-2 border-[#F8BBD0] focus:border-[#C2185B] rounded-2xl px-3 py-2 text-xs text-[#311B1E] font-bold focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-black text-[#3E2723] mb-1">
+                  <label className="block text-xs font-black text-[#311B1E] mb-1">
                     Satuan Ukuran
                   </label>
                   <select
                     value={inputUnit}
                     onChange={(e) => setInputUnit(e.target.value)}
-                    className="w-full bg-[#FAF7F2] border-2 border-[#EFE4DA] focus:border-[#FFB300] rounded-2xl px-3 py-2 text-xs text-[#3E2723] font-bold focus:outline-none"
+                    className="w-full bg-[#FFEBEF]/40 border-2 border-[#F8BBD0] focus:border-[#C2185B] rounded-2xl px-3 py-2 text-xs text-[#311B1E] font-bold focus:outline-none"
                   >
                     {availableUnits.map((u) => (
                       <option key={u.id} value={u.id}>
@@ -302,9 +302,9 @@ export function ItemModal({ isOpen, onClose, mode, itemToEdit, onSuccess }: Item
               </div>
 
               {/* Konversi Pintar Gram -> Kg / Ml -> Liter */}
-              <div className="flex items-center justify-between text-[10px] text-[#8D6E63] font-semibold px-1">
-                <span>Basis Satuan: <strong className="text-[#3E2723]">{groupConfig.label} ({groupConfig.desc})</strong></span>
-                <span className="bg-[#FFF3E0] text-[#E65100] px-2 py-0.5 rounded-full font-bold border border-[#FFE0B2]">
+              <div className="flex items-center justify-between text-[10px] text-[#8D5B68] font-semibold px-1">
+                <span>Basis Satuan: <strong className="text-[#311B1E]">{groupConfig.label} ({groupConfig.desc})</strong></span>
+                <span className="bg-[#FFEBEF] text-[#C2185B] px-2 py-0.5 rounded-full font-bold border border-[#F8BBD0]">
                   Pilihan: {inputUnit}
                 </span>
               </div>
@@ -313,10 +313,10 @@ export function ItemModal({ isOpen, onClose, mode, itemToEdit, onSuccess }: Item
             /* Produk Ready: Jumlah + satuan "pcs" terkunci (Batas warning otomatis terkunci di 5 pcs) */
             <div className="space-y-1.5">
               <div>
-                <label htmlFor="ready-product-qty" className="block text-xs font-black text-[#3E2723] mb-1">
+                <label htmlFor="ready-product-qty" className="block text-xs font-black text-[#311B1E] mb-1">
                   {isEditing ? 'Jumlah Stok Saat Ini' : 'Jumlah Stok Masuk'}
                 </label>
-                <div className="flex items-stretch rounded-2xl border-2 border-[#EFE4DA] focus-within:border-[#FFB300] bg-[#FAF7F2] overflow-hidden">
+                <div className="flex items-stretch rounded-2xl border-2 border-[#F8BBD0] focus-within:border-[#C2185B] bg-[#FFEBEF]/40 overflow-hidden">
                   <input
                     id="ready-product-qty"
                     type="number"
@@ -327,10 +327,10 @@ export function ItemModal({ isOpen, onClose, mode, itemToEdit, onSuccess }: Item
                     value={stock}
                     onChange={(e) => setStock(e.target.value)}
                     placeholder="0"
-                    className="flex-1 min-w-0 bg-transparent px-3 py-2 text-xs text-[#3E2723] font-bold focus:outline-none"
+                    className="flex-1 min-w-0 bg-transparent px-3 py-2 text-xs text-[#311B1E] font-bold focus:outline-none"
                   />
                   <span
-                    className="px-3 flex items-center gap-1 bg-[#3E2723] text-[#FFB300] text-[11px] font-black select-none"
+                    className="px-3 flex items-center gap-1 bg-[#C2185B] text-white text-[11px] font-black select-none"
                     title="Satuan produk ready dikunci pcs"
                   >
                     <Lock className="w-3 h-3" />
@@ -338,7 +338,7 @@ export function ItemModal({ isOpen, onClose, mode, itemToEdit, onSuccess }: Item
                   </span>
                 </div>
               </div>
-              <p className="text-[10px] text-[#8D6E63] font-medium">
+              <p className="text-[10px] text-[#8D5B68] font-medium">
                 {isEditing
                   ? '💡 Ubah angka stok jika ingin mengoreksi jumlah fisik di etalase.'
                   : '💡 Jika produk dengan nama & kategori yang sama sudah ada, stok akan ditambahkan ke produk tersebut.'}
@@ -349,7 +349,7 @@ export function ItemModal({ isOpen, onClose, mode, itemToEdit, onSuccess }: Item
           {/* Kolom Total Biaya Belanja (Khusus Bahan Baku) */}
           {isMaterial && (
             <div>
-              <label className="block text-xs font-black text-[#3E2723] mb-1">
+              <label className="block text-xs font-black text-[#311B1E] mb-1">
                 Total Harga Beli / Belanja (Rp)
               </label>
               <input
@@ -359,16 +359,16 @@ export function ItemModal({ isOpen, onClose, mode, itemToEdit, onSuccess }: Item
                 value={totalCost}
                 onChange={(e) => setTotalCost(e.target.value)}
                 placeholder="Contoh: 35000 (Boleh kosong jika tidak dicatat kas)"
-                className="w-full bg-[#FAF7F2] border-2 border-[#EFE4DA] focus:border-[#FFB300] rounded-2xl px-4 py-2.5 text-xs text-[#3E2723] font-bold focus:outline-none"
+                className="w-full bg-[#FFEBEF]/40 border-2 border-[#F8BBD0] focus:border-[#C2185B] rounded-2xl px-4 py-2.5 text-xs text-[#311B1E] font-bold focus:outline-none"
               />
               {/* Pratinjau Format Rupiah Standar */}
               {totalCost && Number(totalCost) > 0 ? (
-                <div className="mt-1.5 px-3 py-1.5 rounded-xl bg-amber-50 border border-amber-200 text-xs font-bold text-amber-900 flex items-center justify-between">
-                  <span className="text-[11px] text-amber-700 font-medium">Nominal Standar:</span>
-                  <span className="font-black text-xs text-amber-900">{formatRupiah(Number(totalCost))}</span>
+                <div className="mt-1.5 px-3 py-1.5 rounded-xl bg-[#FFEBEF] border border-[#F8BBD0] text-xs font-bold text-[#C2185B] flex items-center justify-between">
+                  <span className="text-[11px] text-[#8D5B68] font-medium">Nominal Standar:</span>
+                  <span className="font-black text-xs text-[#C2185B]">{formatRupiah(Number(totalCost))}</span>
                 </div>
               ) : null}
-              <p className="text-[10px] text-[#8D6E63] mt-1 font-medium">
+              <p className="text-[10px] text-[#8D5B68] mt-1 font-medium">
                 💡 Total belanja ini otomatis dicatat sebagai pengeluaran kas toko ke database.
               </p>
             </div>
@@ -383,17 +383,17 @@ export function ItemModal({ isOpen, onClose, mode, itemToEdit, onSuccess }: Item
           )}
 
           {/* Action buttons */}
-          <div className="pt-3 border-t border-[#EFE4DA] flex items-center justify-end gap-2.5">
+          <div className="pt-3 border-t border-[#F8BBD0] flex items-center justify-end gap-2.5">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 rounded-2xl border border-[#EFE4DA] text-xs font-black text-[#8D6E63] hover:bg-stone-50"
+              className="px-4 py-2.5 rounded-2xl border border-[#F8BBD0] text-xs font-black text-[#8D5B68] hover:bg-[#FFEBEF]/40"
             >
               Batal
             </button>
             <button
               type="submit"
-              className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-[#FFB300] to-[#FFA000] hover:brightness-105 text-[#3E2723] text-xs font-black shadow-md shadow-[#FFB300]/25 active:scale-95 transition-all flex items-center gap-1.5"
+              className="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-[#C2185B] to-[#D81B60] hover:brightness-105 text-white text-xs font-black shadow-md shadow-[#C2185B]/25 active:scale-95 transition-all flex items-center gap-1.5"
             >
               <Check className="w-4 h-4 stroke-[3]" />
               <span>{isEditing ? 'Simpan Perubahan' : 'Tambahkan Stok'}</span>

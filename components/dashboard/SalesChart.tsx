@@ -7,20 +7,20 @@ import { useStore } from '@/lib/store';
 import { formatRupiah, formatNumber, getCategoryUnitGroup, UNIT_GROUP_CONFIG, UnitGroupType } from '@/lib/utils';
 import { cn } from '@/lib/utils';
 
-// Warm Bakery Curated Palette (Wood Brown, Warm Amber, Honey, Dusty Berry, Soft Matcha)
+// Kitchen Chaacake Curated Palette (Magenta, Rose Pink, Deep Wine, Soft Pastel)
 const WARM_BAKERY_COLORS = [
-  '#E65100', // Cinnamon / Caramel
-  '#FFB300', // Honey Gold
-  '#D81B60', // Dusty Berry Rose
-  '#5D4037', // Roasted Crust / Wood Brown
-  '#2E7D32', // Pandan / Matcha Green
-  '#F57C00', // Golden Warm Amber
-  '#8E24AA', // Sweet Taro / Plum
-  '#0288D1', // Vanilla Butter Blue
-  '#8D6E63', // Soft Mocha
-  '#C2185B', // Deep Strawberry Rose
-  '#4E342E', // Dark Chocolate
-  '#795548', // Toasted Wheat
+  '#C2185B', // Kitchen Chaacake Deep Magenta
+  '#E91E63', // Vibrant Rose Pink
+  '#AD1457', // Deep Wine Rose
+  '#D81B60', // Rose Berry
+  '#F06292', // Soft Cake Pink
+  '#880E4F', // Dark Velvet Rose
+  '#EC407A', // Pastry Pink
+  '#2E7D32', // Matcha Green
+  '#FB8C00', // Caramel Orange
+  '#5D4037', // Roasted Crust Brown
+  '#7B1FA2', // Sweet Taro Plum
+  '#00897B', // Pandan Mint
 ];
 
 type ChartType = 'sales' | 'materials' | 'products';
@@ -206,35 +206,35 @@ export function SalesChart() {
 
   if (!mounted) {
     return (
-      <div className="p-4 sm:p-5 rounded-2xl bg-white/90 border border-[#EFE4DA] h-72 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-6 w-6 border-2 border-[#FFB300] border-t-transparent" />
+      <div className="p-4 sm:p-5 rounded-2xl bg-white/95 border border-[#F8BBD0] h-72 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-6 w-6 border-2 border-[#C2185B] border-t-transparent" />
       </div>
     );
   }
 
   return (
-    <div className="p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl bg-white/92 backdrop-blur-md border-1.5 sm:border-2 border-[#EFE4DA] shadow-xs sm:shadow-md shadow-[#3E2723]/5 space-y-3">
+    <div className="p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl bg-white/95 backdrop-blur-md border-1.5 sm:border-2 border-[#F8BBD0] shadow-xs sm:shadow-md shadow-[#C2185B]/5 space-y-3">
       {/* Header with Title and 3 Tab Buttons */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2.5 border-b border-[#EFE4DA]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2.5 border-b border-[#F8BBD0]">
         <div className="flex items-center gap-2">
-          <span className="p-1.5 rounded-xl bg-amber-100 text-amber-900 border border-amber-200 shadow-2xs">
+          <span className="p-1.5 rounded-xl bg-[#FFEBEF] text-[#C2185B] border border-[#F8BBD0] shadow-2xs">
             {chartType === 'sales' ? (
-              <ShoppingBag className="w-4 h-4 text-[#E65100]" />
+              <ShoppingBag className="w-4 h-4 text-[#C2185B]" />
             ) : chartType === 'materials' ? (
-              <Boxes className="w-4 h-4 text-[#FFB300]" />
+              <Boxes className="w-4 h-4 text-[#C2185B]" />
             ) : (
-              <Sparkles className="w-4 h-4 text-[#2E7D32]" />
+              <Sparkles className="w-4 h-4 text-[#C2185B]" />
             )}
           </span>
           <div>
-            <h3 className="text-xs sm:text-sm font-black text-[#3E2723]">
+            <h3 className="text-xs sm:text-sm font-black text-[#311B1E]">
               {chartType === 'sales'
                 ? 'Proporsi Penjualan Toko'
                 : chartType === 'materials'
                 ? 'Proporsi Bahan Baku Ready'
                 : 'Proporsi Stok Produk Ready'}
             </h3>
-            <p className="text-[10px] text-[#8D6E63] font-medium hidden sm:block">
+            <p className="text-[10px] text-[#8D5B68] font-medium hidden sm:block">
               {chartType === 'sales'
                 ? 'Distribusi omset penjualan terkelompok per varian produk'
                 : chartType === 'materials'
@@ -245,15 +245,15 @@ export function SalesChart() {
         </div>
 
         {/* 3 Tab Filter Buttons: 1. Penjualan | 2. Bahan Baku | 3. Produk */}
-        <div className="flex items-center p-0.5 bg-[#FAF7F2] rounded-xl border border-[#EFE4DA] self-start sm:self-auto shadow-2xs">
+        <div className="flex items-center p-0.5 bg-[#FFEBEF]/40 rounded-xl border border-[#F8BBD0] self-start sm:self-auto shadow-2xs">
           <button
             type="button"
             onClick={() => setChartType('sales')}
             className={cn(
               'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-black transition-all',
               chartType === 'sales'
-                ? 'bg-gradient-to-r from-[#FFB300] to-[#FFA000] text-[#3E2723] shadow-xs'
-                : 'text-[#6D4C41] hover:text-[#3E2723]'
+                ? 'bg-gradient-to-r from-[#C2185B] to-[#D81B60] text-white shadow-xs'
+                : 'text-[#5D4037] hover:text-[#C2185B]'
             )}
           >
             <ShoppingBag className="w-3.5 h-3.5" />
@@ -265,8 +265,8 @@ export function SalesChart() {
             className={cn(
               'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-black transition-all',
               chartType === 'materials'
-                ? 'bg-gradient-to-r from-[#FFB300] to-[#FFA000] text-[#3E2723] shadow-xs'
-                : 'text-[#6D4C41] hover:text-[#3E2723]'
+                ? 'bg-gradient-to-r from-[#C2185B] to-[#D81B60] text-white shadow-xs'
+                : 'text-[#5D4037] hover:text-[#C2185B]'
             )}
           >
             <Boxes className="w-3.5 h-3.5" />
@@ -278,8 +278,8 @@ export function SalesChart() {
             className={cn(
               'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-black transition-all',
               chartType === 'products'
-                ? 'bg-gradient-to-r from-[#FFB300] to-[#FFA000] text-[#3E2723] shadow-xs'
-                : 'text-[#6D4C41] hover:text-[#3E2723]'
+                ? 'bg-gradient-to-r from-[#C2185B] to-[#D81B60] text-white shadow-xs'
+                : 'text-[#5D4037] hover:text-[#C2185B]'
             )}
           >
             <Sparkles className="w-3.5 h-3.5" />
@@ -301,8 +301,8 @@ export function SalesChart() {
               className={cn(
                 'px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-black transition-all shrink-0',
                 timeRange === 'daily'
-                  ? 'bg-[#3E2723] text-white shadow-2xs'
-                  : 'bg-[#FAF7F2] text-[#6D4C41] border border-[#EFE4DA] hover:bg-[#FFF3E0]'
+                  ? 'bg-[#C2185B] text-white shadow-xs'
+                  : 'bg-[#FFEBEF]/40 text-[#83274E] border border-[#F8BBD0] hover:bg-[#FFEBEF]'
               )}
             >
               Hari Ini
@@ -313,8 +313,8 @@ export function SalesChart() {
               className={cn(
                 'px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-black transition-all shrink-0',
                 timeRange === 'weekly'
-                  ? 'bg-[#3E2723] text-white shadow-2xs'
-                  : 'bg-[#FAF7F2] text-[#6D4C41] border border-[#EFE4DA] hover:bg-[#FFF3E0]'
+                  ? 'bg-[#C2185B] text-white shadow-xs'
+                  : 'bg-[#FFEBEF]/40 text-[#83274E] border border-[#F8BBD0] hover:bg-[#FFEBEF]'
               )}
             >
               7 Hari
@@ -325,8 +325,8 @@ export function SalesChart() {
               className={cn(
                 'px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-black transition-all shrink-0',
                 timeRange === 'monthly'
-                  ? 'bg-[#3E2723] text-white shadow-2xs'
-                  : 'bg-[#FAF7F2] text-[#6D4C41] border border-[#EFE4DA] hover:bg-[#FFF3E0]'
+                  ? 'bg-[#C2185B] text-white shadow-xs'
+                  : 'bg-[#FFEBEF]/40 text-[#83274E] border border-[#F8BBD0] hover:bg-[#FFEBEF]'
               )}
             >
               30 Hari
@@ -337,8 +337,8 @@ export function SalesChart() {
               className={cn(
                 'px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-black transition-all shrink-0',
                 timeRange === 'all'
-                  ? 'bg-[#3E2723] text-white shadow-2xs'
-                  : 'bg-[#FAF7F2] text-[#6D4C41] border border-[#EFE4DA] hover:bg-[#FFF3E0]'
+                  ? 'bg-[#C2185B] text-white shadow-xs'
+                  : 'bg-[#FFEBEF]/40 text-[#83274E] border border-[#F8BBD0] hover:bg-[#FFEBEF]'
               )}
             >
               Semua Riwayat
@@ -346,7 +346,7 @@ export function SalesChart() {
           </div>
         ) : chartType === 'materials' ? (
           <div className="flex items-center gap-1 overflow-x-auto w-full">
-            <span className="text-[10px] font-bold text-[#8D6E63] uppercase tracking-wider mr-1 hidden sm:inline flex items-center gap-1">
+            <span className="text-[10px] font-bold text-[#83274E] uppercase tracking-wider mr-1 hidden sm:inline flex items-center gap-1">
               <PackageCheck className="w-3 h-3 text-[#2E7D32]" /> Dimensi:
             </span>
             <button
@@ -355,8 +355,8 @@ export function SalesChart() {
               className={cn(
                 'px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-black transition-all shrink-0',
                 inventoryDimension === 'all'
-                  ? 'bg-[#3E2723] text-white shadow-2xs'
-                  : 'bg-[#FAF7F2] text-[#6D4C41] border border-[#EFE4DA] hover:bg-[#FFF3E0]'
+                  ? 'bg-[#C2185B] text-white shadow-xs'
+                  : 'bg-[#FFEBEF]/40 text-[#83274E] border border-[#F8BBD0] hover:bg-[#FFEBEF]'
               )}
             >
               Semua Grup
@@ -367,8 +367,8 @@ export function SalesChart() {
               className={cn(
                 'px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-black transition-all shrink-0',
                 inventoryDimension === 'weight'
-                  ? 'bg-[#3E2723] text-white shadow-2xs'
-                  : 'bg-[#FAF7F2] text-[#6D4C41] border border-[#EFE4DA] hover:bg-[#FFF3E0]'
+                  ? 'bg-[#C2185B] text-white shadow-xs'
+                  : 'bg-[#FFEBEF]/40 text-[#83274E] border border-[#F8BBD0] hover:bg-[#FFEBEF]'
               )}
             >
               Berat (kg)
@@ -379,8 +379,8 @@ export function SalesChart() {
               className={cn(
                 'px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-black transition-all shrink-0',
                 inventoryDimension === 'volume'
-                  ? 'bg-[#3E2723] text-white shadow-2xs'
-                  : 'bg-[#FAF7F2] text-[#6D4C41] border border-[#EFE4DA] hover:bg-[#FFF3E0]'
+                  ? 'bg-[#C2185B] text-white shadow-xs'
+                  : 'bg-[#FFEBEF]/40 text-[#83274E] border border-[#F8BBD0] hover:bg-[#FFEBEF]'
               )}
             >
               Volume (L)
@@ -391,15 +391,15 @@ export function SalesChart() {
               className={cn(
                 'px-2.5 py-1 rounded-lg text-[10px] sm:text-[11px] font-black transition-all shrink-0',
                 inventoryDimension === 'count'
-                  ? 'bg-[#3E2723] text-white shadow-2xs'
-                  : 'bg-[#FAF7F2] text-[#6D4C41] border border-[#EFE4DA] hover:bg-[#FFF3E0]'
+                  ? 'bg-[#C2185B] text-white shadow-xs'
+                  : 'bg-[#FFEBEF]/40 text-[#83274E] border border-[#F8BBD0] hover:bg-[#FFEBEF]'
               )}
             >
               Unit / Pcs
             </button>
           </div>
         ) : (
-          <div className="flex items-center gap-1.5 text-xs text-[#8D6E63] font-medium">
+          <div className="flex items-center gap-1.5 text-xs text-[#83274E] font-medium">
             <span>Menampilkan seluruh stok etalase produk jadi yang tersedia.</span>
           </div>
         )}
@@ -411,8 +411,8 @@ export function SalesChart() {
           <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-200 text-amber-700 flex items-center justify-center">
             <AlertCircle className="w-6 h-6 text-amber-600" />
           </div>
-          <p className="font-black text-sm text-[#3E2723]">Belum Ada Data Barang Ready</p>
-          <p className="text-xs text-[#8D6E63] max-w-xs">
+          <p className="font-black text-sm text-[#311B1E]">Belum Ada Data Barang Ready</p>
+          <p className="text-xs text-[#83274E] max-w-xs">
             {chartType === 'sales'
               ? 'Belum ada transaksi penjualan pada rentang waktu yang dipilih.'
               : chartType === 'materials'
@@ -445,25 +445,25 @@ export function SalesChart() {
                       const data = payload[0].payload;
                       const pct = totalValuation > 0 ? ((data.value / totalValuation) * 100).toFixed(1) : '0';
                       return (
-                        <div className="bg-white/95 backdrop-blur-md border-1.5 border-[#FFB300] p-2.5 rounded-2xl shadow-xl text-[11px] space-y-1">
-                          <p className="font-black text-[#3E2723]">{data.name}</p>
-                          <p className="text-[10px] text-[#8D6E63]">{data.category}</p>
+                        <div className="bg-white/95 backdrop-blur-md border-1.5 border-[#C2185B] p-2.5 rounded-2xl shadow-xl text-[11px] space-y-1">
+                          <p className="font-black text-[#311B1E]">{data.name}</p>
+                          <p className="text-[10px] text-[#83274E]">{data.category}</p>
                           {chartType === 'sales' ? (
-                            <p className="text-[#E65100] font-black text-xs">
-                              {formatRupiah(data.value)} <span className="text-[10px] text-[#3E2723]">({pct}%)</span>
+                            <p className="text-[#C2185B] font-black text-xs">
+                              {formatRupiah(data.value)} <span className="text-[10px] text-[#311B1E]">({pct}%)</span>
                             </p>
                           ) : (
                             <p className="text-[#2E7D32] font-black text-xs">
-                              {formatNumber(data.value)} {data.unitDisplay} <span className="text-[10px] text-[#3E2723]">({pct}%)</span>
+                              {formatNumber(data.value)} {data.unitDisplay} <span className="text-[10px] text-[#311B1E]">({pct}%)</span>
                             </p>
                           )}
                           {'itemCount' in data && (
-                            <p className="text-[10px] text-[#8D6E63] font-bold">
+                            <p className="text-[10px] text-[#83274E] font-bold">
                               {data.itemCount} jenis bahan di kategori ini
                             </p>
                           )}
                           {'count' in data && (
-                            <p className="text-[10px] text-[#8D6E63]">
+                            <p className="text-[10px] text-[#83274E]">
                               {data.count} transaksi tercatat
                             </p>
                           )}
@@ -478,10 +478,10 @@ export function SalesChart() {
 
             {/* Inner Center Label for Donut */}
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center px-4">
-              <span className="text-[9px] font-bold text-[#8D6E63] uppercase tracking-wider">
+              <span className="text-[9px] font-bold text-[#83274E] uppercase tracking-wider">
                 {chartType === 'sales' ? 'Total Omset' : 'Total Stok Ready'}
               </span>
-              <span className="text-xs sm:text-sm font-black text-[#3E2723] leading-tight truncate max-w-[130px]">
+              <span className="text-xs sm:text-sm font-black text-[#311B1E] leading-tight truncate max-w-[130px]">
                 {chartType === 'sales'
                   ? formatRupiah(totalValuation)
                   : `${formatNumber(totalValuation)} ${
@@ -509,7 +509,7 @@ export function SalesChart() {
               return (
                 <div
                   key={item.id}
-                  className="flex items-center justify-between p-2 rounded-xl bg-stone-50/90 border border-[#EFE4DA]/80 text-[11px] hover:border-[#FFB300] transition-colors"
+                  className="flex items-center justify-between p-2 rounded-xl bg-stone-50/90 border border-[#F8BBD0]/80 text-[11px] hover:border-[#C2185B] transition-colors"
                 >
                   <div className="flex items-center gap-2 min-w-0 pr-1">
                     <span
@@ -517,15 +517,15 @@ export function SalesChart() {
                       style={{ backgroundColor: item.color }}
                     />
                     <div className="min-w-0">
-                      <p className="font-bold text-[#3E2723] truncate leading-tight">{item.name}</p>
-                      <p className="text-[9.5px] text-[#8D6E63] truncate">
+                      <p className="font-bold text-[#311B1E] truncate leading-tight">{item.name}</p>
+                      <p className="text-[9.5px] text-[#83274E] truncate">
                         {'itemCount' in item ? `${item.itemCount} varian bahan dapur ready` : item.category}
                       </p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-2 shrink-0 text-right">
-                    <span className="text-[11px] font-mono font-bold text-[#3E2723]">
+                    <span className="text-[11px] font-mono font-bold text-[#311B1E]">
                       {chartType === 'sales' ? formatRupiah(item.value) : `${formatNumber(item.value)} ${item.unitDisplay}`}
                     </span>
                     <span

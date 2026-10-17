@@ -38,7 +38,7 @@ const STATUS_STYLE = {
     Icon: AlertTriangle,
   },
   safe: {
-    card: 'border-[#EFE4DA] bg-white/95',
+    card: 'border-[#F8BBD0] bg-white/95',
     badge: 'bg-emerald-100 text-emerald-800 border-emerald-200',
     stock: 'text-[#2E7D32]',
     label: 'Aman',
@@ -56,16 +56,16 @@ export function MaterialList({
 }: MaterialListProps) {
   if (materials.length === 0) {
     return (
-      <div className="p-8 sm:p-12 text-center rounded-3xl bg-white/90 backdrop-blur-md border border-[#EFE4DA]">
+      <div className="p-8 sm:p-12 text-center rounded-3xl bg-white/90 backdrop-blur-md border border-[#F8BBD0]">
         <Boxes className="w-12 h-12 text-[#BCAAA4] mx-auto mb-3 opacity-60" />
-        <h3 className="font-black text-[#3E2723] text-base">Belum ada bahan baku yang cocok</h3>
-        <p className="text-xs text-[#8D6E63] mt-1">
+        <h3 className="font-black text-[#311B1E] text-base">Belum ada bahan baku yang cocok</h3>
+        <p className="text-xs text-[#8D5B68] mt-1">
           Input bahan baku dapur baru atau sesuaikan kata kunci pencarian & filter kategori.
         </p>
         <button
           type="button"
           onClick={onAdd}
-          className="mt-4 px-4 py-2 rounded-2xl bg-gradient-to-r from-[#FFB300] to-[#FFA000] text-[#3E2723] text-xs font-black shadow-md shadow-[#FFB300]/25 active:scale-95 transition-all"
+          className="mt-4 px-4 py-2 rounded-2xl bg-gradient-to-r from-[#C2185B] to-[#D81B60] text-white text-xs font-black shadow-md shadow-[#C2185B]/25 active:scale-95 transition-all"
         >
           + Tambah Bahan Baku
         </button>
@@ -108,7 +108,7 @@ export function MaterialList({
                       type="button"
                       id={`edit-material-${m.id}`}
                       onClick={() => onEdit(m)}
-                      className="p-1 rounded-md text-[#8D6E63] hover:text-[#3E2723] hover:bg-stone-100"
+                      className="p-1 rounded-md text-[#8D5B68] hover:text-[#311B1E] hover:bg-[#FFEBEF]"
                       title="Ubah Bahan"
                     >
                       <Edit2 className="w-3 h-3" />
@@ -117,7 +117,7 @@ export function MaterialList({
                       type="button"
                       id={`delete-material-${m.id}`}
                       onClick={() => onDelete(m)}
-                      className="p-1 rounded-md text-[#8D6E63] hover:text-rose-600 hover:bg-rose-50"
+                      className="p-1 rounded-md text-[#8D5B68] hover:text-rose-600 hover:bg-rose-50"
                       title="Hapus Bahan"
                     >
                       <Trash2 className="w-3 h-3" />
@@ -127,7 +127,7 @@ export function MaterialList({
 
                 {/* 2. Nama Merek / Jenis Bahan Baku */}
                 <h4
-                  className="font-black text-xs sm:text-sm text-[#3E2723] mt-2 truncate"
+                  className="font-black text-xs sm:text-sm text-[#311B1E] mt-2 truncate"
                   title={m.name}
                 >
                   {m.name}
@@ -140,22 +140,22 @@ export function MaterialList({
                   >
                     {style.label}
                   </span>
-                  <span className="text-[#8D6E63] font-medium text-[9px] sm:text-[10px]">
+                  <span className="text-[#8D5B68] font-medium text-[9px] sm:text-[10px]">
                     Min: {m.minStock} {m.unit}
                   </span>
                 </div>
 
                 {/* 4. Total Persediaan Stok */}
-                <div className="mt-2.5 p-2 rounded-xl bg-[#FAF7F2] border border-[#EFE4DA]">
-                  <span className="text-[9px] font-bold text-[#8D6E63] block">
+                <div className="mt-2.5 p-2 rounded-xl bg-[#FFEBEF]/40 border border-[#F8BBD0]">
+                  <span className="text-[9px] font-bold text-[#8D5B68] block">
                     Stok Tersedia
                   </span>
                   <p className={`text-sm sm:text-lg font-black mt-0.5 ${style.stock}`}>
                     {m.stock}{' '}
-                    <span className="text-xs font-semibold text-[#8D6E63]">{m.unit}</span>
+                    <span className="text-xs font-semibold text-[#8D5B68]">{m.unit}</span>
                   </p>
                   {m.costPerUnit > 0 && (
-                    <span className="text-[9px] text-[#8D6E63] font-medium block truncate mt-0.5">
+                    <span className="text-[9px] text-[#8D5B68] font-medium block truncate mt-0.5">
                       Beli: {formatRupiah(m.costPerUnit)}/{m.unit}
                     </span>
                   )}
@@ -163,7 +163,7 @@ export function MaterialList({
               </div>
 
               {/* 5. Aksi Kurangi Stok Bahan */}
-              <div className="mt-3 pt-2.5 border-t border-[#EFE4DA]/80">
+              <div className="mt-3 pt-2.5 border-t border-[#F8BBD0]/80">
                 <button
                   type="button"
                   id={`reduce-material-${m.id}`}

@@ -230,7 +230,7 @@ export default function StockPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[url('/bg.png')] bg-cover bg-center bg-fixed bg-no-repeat text-[#3E2723] flex flex-col md:flex-row font-sans">
+    <div className="min-h-screen bg-[url('/bg.jpg')] bg-cover bg-center bg-fixed bg-no-repeat text-[#311B1E] flex flex-col md:flex-row font-sans">
       <Sidebar />
 
       <div className="flex-1 flex flex-col min-w-0 pb-28 md:pb-12">
@@ -243,9 +243,9 @@ export default function StockPage() {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="fixed top-20 right-4 z-50 flex items-center gap-2 px-5 py-3 rounded-2xl bg-[#3E2723] text-white text-xs font-black shadow-xl border border-[#FFB300]"
+              className="fixed top-20 right-4 z-50 flex items-center gap-2 px-5 py-3 rounded-2xl bg-[#311B1E] text-white text-xs font-black shadow-xl border border-[#F8BBD0]"
             >
-              <Check className="w-4 h-4 text-[#FFB300]" />
+              <Check className="w-4 h-4 text-[#C2185B]" />
               <span>{toastMessage}</span>
             </motion.div>
           )}
@@ -253,22 +253,22 @@ export default function StockPage() {
 
         <main className="p-3 sm:p-6 lg:p-8 space-y-4 sm:space-y-6 max-w-7xl w-full mx-auto">
           {/* Top Title & Tab Switcher */}
-          <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-white/92 backdrop-blur-md border-1.5 sm:border-2 border-[#EFE4DA] shadow-sm sm:shadow-lg shadow-[#3E2723]/5 space-y-4">
+          <div className="p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-white/92 backdrop-blur-md border-1.5 sm:border-2 border-[#F8BBD0] shadow-sm sm:shadow-lg shadow-[#C2185B]/5 space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="p-1.5 sm:p-2 rounded-xl sm:rounded-2xl bg-[#FFF3E0] text-[#3E2723] border border-[#FFE0B2]">
+                  <span className="p-1.5 sm:p-2 rounded-xl sm:rounded-2xl bg-[#FFEBEF] text-[#C2185B] border border-[#F8BBD0]">
                     {activeTab === 'materials' ? (
-                      <Boxes className="w-4 h-4 sm:w-5 sm:h-5 text-[#FFB300]" />
+                      <Boxes className="w-4 h-4 sm:w-5 sm:h-5 text-[#C2185B]" />
                     ) : (
-                      <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-[#2E7D32]" />
+                      <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-[#C2185B]" />
                     )}
                   </span>
-                  <h2 className="text-base sm:text-2xl font-black text-[#3E2723] tracking-tight">
+                  <h2 className="text-base sm:text-2xl font-black text-[#311B1E] tracking-tight">
                     {activeTab === 'materials' ? 'Manajemen Bahan Baku Dapur' : 'Manajemen Stok Produk Ready'}
                   </h2>
                 </div>
-                <p className="text-[11px] sm:text-xs text-[#8D6E63] mt-1 font-medium">
+                <p className="text-[11px] sm:text-xs text-[#8D5B68] mt-1 font-medium">
                   {activeTab === 'materials'
                     ? 'Pencatatan persediaan bahan baku dapur per kategori otomatis menyesuaikan satuan.'
                     : 'Input stok produk ready (pcs). Stok berkurang otomatis saat transaksi penjualan di Keuangan Toko.'}
@@ -280,7 +280,7 @@ export default function StockPage() {
                 <button
                   type="button"
                   onClick={handleOpenAdd}
-                  className="justify-center px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl bg-gradient-to-r from-[#FFB300] to-[#FFA000] hover:brightness-105 text-[#3E2723] text-[11px] sm:text-xs font-black flex items-center gap-1.5 shadow-md shadow-[#FFB300]/25 active:scale-95 transition-all"
+                  className="justify-center px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl bg-gradient-to-r from-[#C2185B] to-[#D81B60] hover:brightness-105 text-white text-[11px] sm:text-xs font-black flex items-center gap-1.5 shadow-md shadow-[#C2185B]/25 active:scale-95 transition-all"
                 >
                   <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[3]" />
                   <span className="truncate">
@@ -303,17 +303,17 @@ export default function StockPage() {
                 <button
                   type="button"
                   onClick={() => setIsCatManageOpen(true)}
-                  className="justify-center px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl bg-[#FFF8E1] hover:bg-[#FFECB3] border border-[#FFE082] text-[#3E2723] text-[11px] sm:text-xs font-black flex items-center gap-1.5 transition-all shadow-xs"
+                  className="justify-center px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl bg-[#FFEBEF] hover:bg-[#F8BBD0]/50 border border-[#F8BBD0] text-[#311B1E] text-[11px] sm:text-xs font-black flex items-center gap-1.5 transition-all shadow-xs"
                   title="Kelola & Atur Kategori"
                 >
-                  <Tags className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#FFB300]" />
+                  <Tags className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#C2185B]" />
                   <span className="truncate">Kategori</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setIsClearStockOpen(true)}
-                  className="col-span-2 sm:col-span-1 justify-center px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl bg-stone-100 hover:bg-rose-50 border border-stone-200 hover:border-rose-200 text-[#8D6E63] hover:text-rose-700 text-[11px] sm:text-xs font-black flex items-center gap-1.5 transition-all shadow-xs"
+                  className="col-span-2 sm:col-span-1 justify-center px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl sm:rounded-2xl bg-stone-100 hover:bg-rose-50 border border-stone-200 hover:border-rose-200 text-[#8D5B68] hover:text-rose-700 text-[11px] sm:text-xs font-black flex items-center gap-1.5 transition-all shadow-xs"
                   title="Hapus Database Stok"
                 >
                   <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
@@ -323,7 +323,7 @@ export default function StockPage() {
             </div>
 
             {/* Segmented Tab Switcher: Bahan Baku vs Stok Produk Ready */}
-            <div className="flex items-center p-1 bg-[#FAF7F2] rounded-2xl border border-[#EFE4DA] text-xs font-black max-w-md">
+            <div className="flex items-center p-1 bg-[#FFEBEF]/40 rounded-2xl border border-[#F8BBD0] text-xs font-black max-w-md">
               <button
                 type="button"
                 onClick={() => {
@@ -332,8 +332,8 @@ export default function StockPage() {
                 }}
                 className={`flex-1 py-2 px-3 rounded-xl flex items-center justify-center gap-2 transition-all ${
                   activeTab === 'materials'
-                    ? 'bg-[#3E2723] text-[#FFB300] shadow-sm'
-                    : 'text-[#8D6E63] hover:text-[#3E2723]'
+                    ? 'bg-[#C2185B] text-white shadow-sm'
+                    : 'text-[#8D5B68] hover:text-[#311B1E]'
                 }`}
               >
                 <Boxes className="w-4 h-4" />
@@ -347,8 +347,8 @@ export default function StockPage() {
                 }}
                 className={`flex-1 py-2 px-3 rounded-xl flex items-center justify-center gap-2 transition-all ${
                   activeTab === 'products'
-                    ? 'bg-[#3E2723] text-[#FFB300] shadow-sm'
-                    : 'text-[#8D6E63] hover:text-[#3E2723]'
+                    ? 'bg-[#C2185B] text-white shadow-sm'
+                    : 'text-[#8D5B68] hover:text-[#311B1E]'
                 }`}
               >
                 <Sparkles className="w-4 h-4" />
@@ -358,18 +358,18 @@ export default function StockPage() {
           </div>
 
           {/* Filters Bar: Dropdown Kategori & Status & Search */}
-          <div className="p-3.5 sm:p-4 rounded-2xl bg-white/90 backdrop-blur-md border border-[#EFE4DA] shadow-xs space-y-3">
+          <div className="p-3.5 sm:p-4 rounded-2xl bg-white/90 backdrop-blur-md border border-[#F8BBD0] shadow-xs space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
               {/* DROPDOWN FILTER KATEGORI (Rapi, Responsif & Hemat Ruang) */}
               <div className="sm:col-span-5 flex items-center gap-2">
-                <span className="p-2 rounded-xl bg-[#FAF7F2] border border-[#EFE4DA] text-[#8D6E63] shrink-0">
-                  <Filter className="w-4 h-4 text-[#FFB300]" />
+                <span className="p-2 rounded-xl bg-[#FFEBEF]/40 border border-[#F8BBD0] text-[#8D5B68] shrink-0">
+                  <Filter className="w-4 h-4 text-[#C2185B]" />
                 </span>
                 <div className="flex-1">
                   <select
                     value={selectedCategoryId}
                     onChange={(e) => setSelectedCategoryId(e.target.value)}
-                    className="w-full bg-[#FAF7F2] border-2 border-[#EFE4DA] focus:border-[#FFB300] rounded-xl px-3 py-2 text-xs font-black text-[#3E2723] focus:outline-none transition-all shadow-2xs"
+                    className="w-full bg-[#FFEBEF]/40 border-2 border-[#F8BBD0] focus:border-[#C2185B] rounded-xl px-3 py-2 text-xs font-black text-[#311B1E] focus:outline-none transition-all shadow-2xs"
                   >
                     <option value="all">
                       Semua Kategori {activeTab === 'materials' ? 'Bahan Baku' : 'Produk'} ({currentCategories.length})
@@ -385,9 +385,9 @@ export default function StockPage() {
 
               {/* Status Filter: Bahan (Semua/Kritis/Aman) atau Produk Ready (Semua/Tersedia/Hampir Habis/Habis) */}
               {activeTab === 'products' ? (
-              <div className="sm:col-span-3 grid grid-cols-4 bg-[#FAF7F2] rounded-xl border border-[#EFE4DA] p-1 text-[10px] gap-0.5">
+              <div className="sm:col-span-3 grid grid-cols-4 bg-[#FFEBEF]/40 rounded-xl border border-[#F8BBD0] p-1 text-[10px] gap-0.5">
                 {([
-                  { id: 'all', label: 'Semua', active: 'bg-[#3E2723] text-white', idle: 'text-[#8D6E63] hover:text-[#3E2723]' },
+                  { id: 'all', label: 'Semua', active: 'bg-[#C2185B] text-white', idle: 'text-[#8D5B68] hover:text-[#311B1E]' },
                   { id: 'available', label: 'Tersedia', active: 'bg-emerald-600 text-white', idle: 'text-emerald-700 hover:bg-emerald-50' },
                   { id: 'low', label: 'Menipis', active: 'bg-amber-500 text-white', idle: 'text-amber-700 hover:bg-amber-50' },
                   { id: 'out', label: 'Habis', active: 'bg-rose-600 text-white', idle: 'text-rose-700 hover:bg-rose-50' },
@@ -411,14 +411,14 @@ export default function StockPage() {
                 ))}
               </div>
               ) : (
-              <div className="sm:col-span-3 grid grid-cols-3 bg-[#FAF7F2] rounded-xl border border-[#EFE4DA] p-1 text-[10px] gap-0.5">
+              <div className="sm:col-span-3 grid grid-cols-3 bg-[#FFEBEF]/40 rounded-xl border border-[#F8BBD0] p-1 text-[10px] gap-0.5">
                 <button
                   type="button"
                   onClick={() => setStockStatusFilter('all')}
                   className={`py-1 rounded-lg font-black transition-all flex flex-col items-center leading-tight ${
                     stockStatusFilter === 'all'
-                      ? 'bg-[#3E2723] text-white shadow-2xs'
-                      : 'text-[#8D6E63] hover:text-[#3E2723]'
+                      ? 'bg-[#C2185B] text-white shadow-2xs'
+                      : 'text-[#8D5B68] hover:text-[#311B1E]'
                   }`}
                 >
                   <span>Semua</span>
@@ -459,19 +459,19 @@ export default function StockPage() {
 
               {/* Search Bar */}
               <div className="sm:col-span-4 relative">
-                <Search className="w-4 h-4 text-[#A1887F] absolute left-3 top-1/2 -translate-y-1/2" />
+                <Search className="w-4 h-4 text-[#8D5B68] absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Cari nama barang / varian..."
-                  className="w-full bg-[#FAF7F2] border-2 border-[#EFE4DA] focus:border-[#FFB300] rounded-xl pl-9 pr-8 py-1.5 text-xs text-[#3E2723] font-bold placeholder-[#A1887F] focus:outline-none"
+                  className="w-full bg-[#FFEBEF]/40 border-2 border-[#F8BBD0] focus:border-[#C2185B] rounded-xl pl-9 pr-8 py-1.5 text-xs text-[#311B1E] font-bold placeholder-[#8D5B68] focus:outline-none"
                 />
                 {searchQuery && (
                   <button
                     type="button"
                     onClick={() => setSearchQuery('')}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#8D6E63] hover:text-[#3E2723]"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#8D5B68] hover:text-[#311B1E]"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>

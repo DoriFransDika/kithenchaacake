@@ -129,23 +129,23 @@ export function ReduceStockModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in">
-      <div className="bg-white border-2 border-rose-200 rounded-3xl w-full max-w-md shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="bg-white border-2 border-[#F8BBD0] rounded-3xl w-full max-w-md shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="p-5 border-b border-rose-100 flex items-center justify-between bg-gradient-to-r from-rose-50/70 to-white">
+        <div className="p-5 border-b border-[#F8BBD0]/50 flex items-center justify-between bg-gradient-to-r from-[#FFEBEF]/70 to-white">
           <div className="flex items-center gap-3">
-            <span className="p-2.5 rounded-2xl bg-rose-600 text-white shadow-xs">
+            <span className="p-2.5 rounded-2xl bg-[#C2185B] text-white shadow-xs">
               <Minus className="w-5 h-5 stroke-[3]" />
             </span>
             <div>
-              <h3 className="font-black text-lg text-[#3E2723]">Kurangi Stok Bahan</h3>
-              <p className="text-xs text-[#8D6E63] font-medium">
+              <h3 className="font-black text-lg text-[#311B1E]">Kurangi Stok Bahan</h3>
+              <p className="text-xs text-[#83274E] font-medium">
                 Catat pemakaian atau penyusutan stok bahan dapur
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-[#8D6E63] hover:text-[#3E2723] hover:bg-rose-50 transition-colors"
+            className="p-2 rounded-xl text-[#83274E] hover:text-[#311B1E] hover:bg-[#FFEBEF] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -175,17 +175,17 @@ export function ReduceStockModal({
 
           {/* Kategori Bahan: Terkunci atau Pilihan Universal */}
           <div>
-            <label className="block text-xs font-black text-[#3E2723] mb-1.5">
+            <label className="block text-xs font-black text-[#311B1E] mb-1.5">
               Kategori Bahan Baku
             </label>
             {isLockedCategory ? (
-              <div className="p-3 rounded-2xl bg-stone-100 border border-[#EFE4DA] flex items-center justify-between">
+              <div className="p-3 rounded-2xl bg-[#FFEBEF]/40 border border-[#F8BBD0] flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  {currentCategory && <CategoryIcon name={currentCategory.iconName} className="w-4 h-4 text-[#FFB300]" />}
-                  <span className="text-xs font-black text-[#3E2723]">{currentCategoryName}</span>
+                  {currentCategory && <CategoryIcon name={currentCategory.iconName} className="w-4 h-4 text-[#C2185B]" />}
+                  <span className="text-xs font-black text-[#311B1E]">{currentCategoryName}</span>
                 </div>
-                <span className="text-[11px] font-bold text-[#8D6E63]">
-                  Tersisa: <strong className="text-[#3E2723]">{availableStock} {baseUnit}</strong>
+                <span className="text-[11px] font-bold text-[#83274E]">
+                  Tersisa: <strong className="text-[#311B1E]">{availableStock} {baseUnit}</strong>
                 </span>
               </div>
             ) : (
@@ -193,7 +193,7 @@ export function ReduceStockModal({
                 <select
                   value={categoryId}
                   onChange={(e) => handleSelectCategory(e.target.value)}
-                  className="w-full bg-[#FAF7F2] border-2 border-[#EFE4DA] focus:border-rose-400 rounded-2xl px-3.5 py-2.5 text-xs text-[#3E2723] font-bold focus:outline-none"
+                  className="w-full bg-[#FFEBEF]/30 border-2 border-[#F8BBD0] focus:border-[#C2185B] rounded-2xl px-3.5 py-2.5 text-xs text-[#311B1E] font-bold focus:outline-none"
                 >
                   {materialCategories.map((c) => {
                     const mat = rawMaterials.find((m) => m.categoryId === c.id || m.category === c.name);
@@ -206,9 +206,9 @@ export function ReduceStockModal({
                     );
                   })}
                 </select>
-                <div className="flex items-center justify-between text-[10px] text-[#8D6E63] pt-0.5">
-                  <span>Stok saat ini: <strong className="text-[#3E2723]">{availableStock} {baseUnit}</strong></span>
-                  <span className="bg-amber-100/70 text-[#3E2723] px-2 py-0.2 rounded-full font-bold">
+                <div className="flex items-center justify-between text-[10px] text-[#83274E] pt-0.5">
+                  <span>Stok saat ini: <strong className="text-[#311B1E]">{availableStock} {baseUnit}</strong></span>
+                  <span className="bg-[#FFEBEF] text-[#C2185B] px-2 py-0.5 rounded-full font-bold">
                     Grup: {groupConfig.label}
                   </span>
                 </div>
@@ -219,13 +219,13 @@ export function ReduceStockModal({
           {/* Pilihan Merek Bahan Baku */}
           {materialsInCat.length > 1 ? (
             <div>
-              <label className="block text-xs font-black text-[#3E2723] mb-1.5">
+              <label className="block text-xs font-black text-[#311B1E] mb-1.5">
                 Pilih Merek / Varian Bahan Baku
               </label>
               <select
                 value={selectedMaterial?.id || ''}
                 onChange={(e) => setMaterialId(e.target.value)}
-                className="w-full bg-[#FAF7F2] border-2 border-[#EFE4DA] focus:border-rose-400 rounded-2xl px-3.5 py-2.5 text-xs text-[#3E2723] font-bold focus:outline-none"
+                className="w-full bg-[#FFEBEF]/30 border-2 border-[#F8BBD0] focus:border-[#C2185B] rounded-2xl px-3.5 py-2.5 text-xs text-[#311B1E] font-bold focus:outline-none"
               >
                 {materialsInCat.map((m) => (
                   <option key={m.id} value={m.id}>
@@ -235,9 +235,9 @@ export function ReduceStockModal({
               </select>
             </div>
           ) : selectedMaterial?.name && selectedMaterial.name !== currentCategoryName ? (
-            <div className="px-3 py-2 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-bold flex items-center justify-between">
-              <span>Merek Bahan:</span>
-              <span className="font-black text-[#3E2723]">{selectedMaterial.name}</span>
+            <div className="px-3 py-2 rounded-xl bg-[#FFEBEF]/60 border border-[#F8BBD0] text-[#311B1E] text-xs font-bold flex items-center justify-between">
+              <span className="text-[#83274E]">Merek Bahan:</span>
+              <span className="font-black text-[#311B1E]">{selectedMaterial.name}</span>
             </div>
           ) : null}
 
@@ -245,7 +245,7 @@ export function ReduceStockModal({
           <div className="space-y-1.5">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-black text-[#3E2723] mb-1">
+                <label className="block text-xs font-black text-[#311B1E] mb-1">
                   Jumlah yang Dikurangi
                 </label>
                 <input
@@ -256,17 +256,17 @@ export function ReduceStockModal({
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="Contoh: 0.5"
-                  className="w-full bg-[#FAF7F2] border-2 border-[#EFE4DA] focus:border-rose-400 rounded-2xl px-3 py-2 text-xs text-[#3E2723] font-bold focus:outline-none"
+                  className="w-full bg-[#FFEBEF]/30 border-2 border-[#F8BBD0] focus:border-[#C2185B] rounded-2xl px-3 py-2 text-xs text-[#311B1E] font-bold focus:outline-none"
                 />
               </div>
               <div>
-                <label className="block text-xs font-black text-[#3E2723] mb-1">
+                <label className="block text-xs font-black text-[#311B1E] mb-1">
                   Satuan Ukuran
                 </label>
                 <select
                   value={unit}
                   onChange={(e) => setUnit(e.target.value)}
-                  className="w-full bg-[#FAF7F2] border-2 border-[#EFE4DA] focus:border-rose-400 rounded-2xl px-3 py-2 text-xs text-[#3E2723] font-bold focus:outline-none"
+                  className="w-full bg-[#FFEBEF]/30 border-2 border-[#F8BBD0] focus:border-[#C2185B] rounded-2xl px-3 py-2 text-xs text-[#311B1E] font-bold focus:outline-none"
                 >
                   {availableUnits.map((u) => (
                     <option key={u.id} value={u.id}>
@@ -279,13 +279,13 @@ export function ReduceStockModal({
 
             {/* Konversi Pintar Gram -> Kg / Ml -> Liter */}
             {unitGroup === 'weight' && unit === 'gr' && (
-              <div className="px-3 py-1.5 rounded-xl bg-rose-50 border border-rose-200 text-[11px] text-rose-800 font-bold flex items-center justify-between">
+              <div className="px-3 py-1.5 rounded-xl bg-[#FFEBEF] border border-[#F8BBD0] text-[11px] text-[#C2185B] font-bold flex items-center justify-between">
                 <span>🔄 Konversi Sistem:</span>
                 <span className="text-xs font-black">-{finalAmount} kg</span>
               </div>
             )}
             {unitGroup === 'volume' && unit === 'ml' && (
-              <div className="px-3 py-1.5 rounded-xl bg-rose-50 border border-rose-200 text-[11px] text-rose-800 font-bold flex items-center justify-between">
+              <div className="px-3 py-1.5 rounded-xl bg-[#FFEBEF] border border-[#F8BBD0] text-[11px] text-[#C2185B] font-bold flex items-center justify-between">
                 <span>🔄 Konversi Sistem:</span>
                 <span className="text-xs font-black">-{finalAmount} liter</span>
               </div>
@@ -300,7 +300,7 @@ export function ReduceStockModal({
 
           {/* Keterangan / Alasan Pengurangan */}
           <div>
-            <label className="block text-xs font-black text-[#3E2723] mb-1">
+            <label className="block text-xs font-black text-[#311B1E] mb-1">
               Keterangan / Alasan Pengurangan
             </label>
             <input
@@ -309,27 +309,27 @@ export function ReduceStockModal({
               value={reason}
               onChange={(e) => setReason(e.target.value)}
               placeholder="Contoh: Dipakai buat 30 roti sobek, tumpah, expired"
-              className="w-full bg-[#FAF7F2] border-2 border-[#EFE4DA] focus:border-rose-400 rounded-2xl px-3.5 py-2 text-xs text-[#3E2723] font-bold focus:outline-none"
+              className="w-full bg-[#FFEBEF]/30 border-2 border-[#F8BBD0] focus:border-[#C2185B] rounded-2xl px-3.5 py-2 text-xs text-[#311B1E] font-bold focus:outline-none"
             />
           </div>
 
           {/* Catatan Transparan Ke Mana Data Akan Pergi */}
-          <div className="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200 text-xs text-amber-900 space-y-1">
-            <div className="flex items-center gap-1.5 font-black text-[11px] text-amber-800">
+          <div className="p-3.5 rounded-2xl bg-[#FFEBEF]/50 border border-[#F8BBD0] text-xs text-[#311B1E] space-y-1">
+            <div className="flex items-center gap-1.5 font-black text-[11px] text-[#C2185B]">
               <Info className="w-3.5 h-3.5" />
               <span>Informasi Aliran Data:</span>
             </div>
-            <p className="text-[11px] leading-relaxed text-amber-900/90 font-medium">
+            <p className="text-[11px] leading-relaxed text-[#311B1E]/90 font-medium">
               Pengurangan stok ini akan memotong saldo inventaris kategori <strong>{currentCategoryName}</strong> sebanyak <strong>{finalAmount} {baseUnit}</strong> di database Supabase.
             </p>
           </div>
 
           {/* Action Buttons */}
-          <div className="pt-2 border-t border-[#EFE4DA] flex items-center justify-end gap-2.5">
+          <div className="pt-2 border-t border-[#F8BBD0]/50 flex items-center justify-end gap-2.5">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 rounded-2xl border border-[#EFE4DA] text-xs font-black text-[#8D6E63] hover:bg-stone-50"
+              className="px-4 py-2.5 rounded-2xl border border-[#F8BBD0] text-xs font-black text-[#83274E] hover:bg-[#FFEBEF]/40"
             >
               Batal
             </button>
@@ -339,7 +339,7 @@ export function ReduceStockModal({
               className={`px-5 py-2.5 rounded-2xl text-white text-xs font-black shadow-md transition-all flex items-center gap-1.5 ${
                 isExceeding
                   ? 'bg-rose-300 cursor-not-allowed shadow-none'
-                  : 'bg-rose-600 hover:bg-rose-700 shadow-rose-500/20 active:scale-95'
+                  : 'bg-[#C2185B] hover:bg-[#AD1457] shadow-[#C2185B]/20 active:scale-95'
               }`}
             >
               <Minus className="w-4 h-4 stroke-[3]" />

@@ -55,14 +55,14 @@ export function DeleteDatabaseModal({
                 <Trash2 className="w-5 h-5 stroke-[2.5]" />
               </div>
               <div>
-                <h3 className="text-base font-black text-[#3E2723]">{title}</h3>
+                <h3 className="text-base font-black text-[#311B1E]">{title}</h3>
                 <p className="text-[11px] text-rose-700 font-bold">{itemCountText}</p>
               </div>
             </div>
             <button
               onClick={onClose}
               disabled={isDeleting}
-              className="p-1.5 rounded-xl text-[#8D6E63] hover:text-[#3E2723] hover:bg-white/80 transition-colors"
+              className="p-1.5 rounded-xl text-[#83274E] hover:text-[#311B1E] hover:bg-white/80 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -70,7 +70,7 @@ export function DeleteDatabaseModal({
 
           {/* Body Content */}
           <div className="p-6 space-y-4">
-            <p className="text-xs text-[#5D4037] leading-relaxed">
+            <p className="text-xs text-[#311B1E]/90 leading-relaxed">
               {description}
             </p>
 
@@ -84,12 +84,12 @@ export function DeleteDatabaseModal({
           </div>
 
           {/* Actions Footer */}
-          <div className="p-5 bg-[#FAF7F2] border-t border-[#EFE4DA] flex items-center justify-end gap-2.5">
+          <div className="p-5 bg-[#FFEBEF]/40 border-t border-[#F8BBD0] flex items-center justify-end gap-2.5">
             <button
               type="button"
               onClick={onClose}
               disabled={isDeleting}
-              className="px-4 py-2.5 rounded-2xl text-xs font-bold text-[#8D6E63] hover:text-[#3E2723] hover:bg-white border border-[#EFE4DA] transition-all"
+              className="px-4 py-2.5 rounded-2xl text-xs font-bold text-[#83274E] hover:text-[#311B1E] hover:bg-white border border-[#F8BBD0] transition-all"
             >
               Batal
             </button>
@@ -97,7 +97,7 @@ export function DeleteDatabaseModal({
               type="button"
               onClick={handleConfirm}
               disabled={isDeleting}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-black shadow-md shadow-rose-600/30 active:scale-95 transition-all disabled:opacity-50"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-[#C2185B] hover:bg-[#AD1457] text-white text-xs font-black shadow-md shadow-[#C2185B]/30 active:scale-95 transition-all disabled:opacity-50"
             >
               {isDeleting ? (
                 <>

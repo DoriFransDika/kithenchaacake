@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Dapur Mamak Management System | Bakery Private OS',
-  description: 'Sistem pencatatan produksi resep, stok bahan baku, dan pembukuan keuangan toko roti Dapur Mamak.',
+  title: 'Kitchen Chaacake Management System | Bakery & Cake OS',
+  description: 'Sistem pencatatan produksi resep, stok bahan baku, dan pembukuan keuangan toko kue Kitchen Chaacake.',
 };
 
 export default function RootLayout({
@@ -28,7 +28,7 @@ export default function RootLayout({
       lang="id"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-stone-950 text-stone-100 selection:bg-amber-500 selection:text-stone-950">
+      <body className="min-h-full flex flex-col selection:bg-[#C2185B]/25 selection:text-[#311B1E]">
         <StoreProvider>
           {children}
         </StoreProvider>

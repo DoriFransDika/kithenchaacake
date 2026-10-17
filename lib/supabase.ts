@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 import { Category, RawMaterial, FinishedProduct, Transaction, ActivityNotification } from '@/types';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://qtqcynyryjemqqunzhsz.supabase.co';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_-eNWtGncz8vy3c6-QM4_5g_WvLwnKWQ';
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://aivmrlglexmzbryjvaui.supabase.co';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_Hieo3NpRo1vEHsQkNB9OwQ_d2nE1nGO';
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
@@ -87,6 +87,15 @@ export interface DbNotification {
   message: string;
   time: string;
   severity: 'warning' | 'success' | 'info';
+  created_at?: string;
+}
+
+export interface DbUser {
+  id: string;
+  email: string;
+  password_hash: string;
+  name: string;
+  role: string;
   created_at?: string;
 }
 
@@ -567,4 +576,31 @@ export const supabaseService = {
       return { success: false, message: msg };
     }
   },
+
+  // Users & Auth Verification
+  async verifyUser(email: string, pass: string): Promise<{ success: boolean; user?: { email: string; name: string; role: string } }> {
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('email', email.trim().toLowerCase())
+        .limit(1)
+        .maybeSingle();
+      if (error || !data) return { success: false };
+      if (data.password_hash === pass.trim()) {
+        return {
+          success: true,
+          user: {
+            email: data.email,
+            name: data.name || 'Chaacake Chef & Owner',
+            role: data.role || 'Owner Utama',
+          },
+        };
+      }
+      return { success: false };
+    } catch {
+      return { success: false };
+    }
+  },
 };
+

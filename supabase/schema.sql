@@ -1,5 +1,5 @@
 -- =========================================================================
--- DATABASE SCHEMA: DAPUR MAMAK MANAGEMENT SYSTEM
+-- DATABASE SCHEMA: KITCHEN CHAACAKE MANAGEMENT SYSTEM
 -- Jalankan skrip ini di: Supabase Dashboard -> SQL Editor -> New Query -> Run
 -- =========================================================================
 
@@ -75,6 +75,16 @@ CREATE TABLE IF NOT EXISTS public.notifications (
     created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
+-- 6. TABEL PENGGUNA (users)
+CREATE TABLE IF NOT EXISTS public.users (
+    id TEXT PRIMARY KEY,
+    email TEXT UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    name TEXT NOT NULL DEFAULT 'Mamak Chef & Owner',
+    role TEXT NOT NULL DEFAULT 'Owner Utama',
+    created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
 -- =========================================================================
 -- ROW LEVEL SECURITY (RLS) POLICIES
 -- Memberikan izin SELECT, INSERT, UPDATE, DELETE kepada anon/public
@@ -85,6 +95,11 @@ ALTER TABLE public.raw_materials ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.finished_products ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.transactions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.notifications ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
+
+-- Users policies
+DROP POLICY IF EXISTS "Public full access users" ON public.users;
+CREATE POLICY "Public full access users" ON public.users FOR ALL USING (true) WITH CHECK (true);
 
 -- Categories policies
 DROP POLICY IF EXISTS "Public full access categories" ON public.categories;
@@ -213,3 +228,56 @@ ON CONFLICT (id) DO UPDATE SET
     message = EXCLUDED.message,
     time = EXCLUDED.time,
     severity = EXCLUDED.severity;
+
+-- =========================================================================
+-- MANAJEMEN PENGGUNA & KEAMANAN AKUN (PRODUCTION)
+-- =========================================================================
+-- Akun pengguna dan kredensial login dikelola langsung di tabel public.users /
+-- Supabase Auth Dashboard secara terenkripsi dan aman.
+-- Kredensial (email & kata sandi) TIDAK disimpan dalam file skrip source code
+-- demi menjaga kerahasiaan dan keamanan data produksi.
+-- =========================================================================
+
+-- =========================================================================
+-- INDEXES & PERFORMANCE
+-- =========================================================================
+CREATE INDEX IF NOT EXISTS idx_raw_materials_category_id ON public.raw_materials(category_id);
+CREATE INDEX IF NOT EXISTS idx_finished_products_category_id ON public.finished_products(category_id);
+CREATE INDEX IF NOT EXISTS idx_transactions_date ON public.transactions(date DESC);
+CREATE INDEX IF NOT EXISTS idx_notifications_created_at ON public.notifications(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_users_email ON public.users(email);
+
+-- =========================================================================
+-- SUPABASE REALTIME REPLICATION SETUP
+-- Aktifkan broadcast perubahan realtime ke aplikasi frontend
+-- =========================================================================
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_publication WHERE pubname = 'supabase_realtime') THEN
+    BEGIN
+      ALTER PUBLICATION supabase_realtime ADD TABLE public.categories;
+    EXCEPTION WHEN duplicate_object THEN NULL;
+    END;
+    BEGIN
+      ALTER PUBLICATION supabase_realtime ADD TABLE public.raw_materials;
+    EXCEPTION WHEN duplicate_object THEN NULL;
+    END;
+    BEGIN
+      ALTER PUBLICATION supabase_realtime ADD TABLE public.finished_products;
+    EXCEPTION WHEN duplicate_object THEN NULL;
+    END;
+    BEGIN
+      ALTER PUBLICATION supabase_realtime ADD TABLE public.transactions;
+    EXCEPTION WHEN duplicate_object THEN NULL;
+    END;
+    BEGIN
+      ALTER PUBLICATION supabase_realtime ADD TABLE public.notifications;
+    EXCEPTION WHEN duplicate_object THEN NULL;
+    END;
+    BEGIN
+      ALTER PUBLICATION supabase_realtime ADD TABLE public.users;
+    EXCEPTION WHEN duplicate_object THEN NULL;
+    END;
+  END IF;
+END $$;
+

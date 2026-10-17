@@ -81,16 +81,16 @@ export function SupabaseSyncButton() {
       {isOpen && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
-          <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white border border-[#EFE4DA] rounded-3xl shadow-[0_20px_50px_rgba(62,39,35,0.18)] p-5 z-50 animate-in fade-in zoom-in-95 duration-150">
+          <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white border border-[#F8BBD0] rounded-3xl shadow-[0_20px_50px_rgba(194,24,91,0.15)] p-5 z-50 animate-in fade-in zoom-in-95 duration-150">
             {/* Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-[#EFE4DA]">
+            <div className="flex items-center justify-between pb-3 border-b border-[#F8BBD0]">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center border border-emerald-200">
                   <Database className="w-4 h-4" />
                 </div>
                 <div>
-                  <h4 className="font-black text-sm text-[#3E2723]">Integrasi Supabase</h4>
-                  <p className="text-[10px] text-[#8D6E63] font-mono">qtqcynyryjemqqunzhsz.supabase.co</p>
+                  <h4 className="font-black text-sm text-[#311B1E]">Integrasi Supabase</h4>
+                  <p className="text-[10px] text-[#8D5B68] font-mono">aivmrlglexmzbryjvaui.supabase.co</p>
                 </div>
               </div>
               <span
@@ -136,49 +136,49 @@ export function SupabaseSyncButton() {
                     <span className="font-bold">Database Supabase Siap & Terhubung!</span>
                   </div>
                   <p className="text-[11px] text-emerald-800">
-                    Setiap perubahan kategori, stok bahan, produk roti, dan kasir langsung tersinkronkan ke Supabase.
+                    Setiap perubahan kategori, stok bahan, produk cake & roti, dan kasir langsung tersinkronkan ke Supabase.
                   </p>
                 </div>
               )}
 
               {/* Data Summary Counter */}
               <div className="grid grid-cols-2 gap-2 text-center text-xs">
-                <div className="p-2 bg-[#FAF7F2] rounded-xl border border-[#EFE4DA]">
-                  <p className="text-[10px] text-[#8D6E63] font-bold">Kategori / Bahan</p>
-                  <p className="font-black text-[#3E2723]">
+                <div className="p-2 bg-[#FFEBEF]/50 rounded-xl border border-[#F8BBD0]">
+                  <p className="text-[10px] text-[#8D5B68] font-bold">Kategori / Bahan</p>
+                  <p className="font-black text-[#311B1E]">
                     {categories.length} / {rawMaterials.length}
                   </p>
                 </div>
-                <div className="p-2 bg-[#FAF7F2] rounded-xl border border-[#EFE4DA]">
-                  <p className="text-[10px] text-[#8D6E63] font-bold">Produk / Transaksi</p>
-                  <p className="font-black text-[#3E2723]">
+                <div className="p-2 bg-[#FFEBEF]/50 rounded-xl border border-[#F8BBD0]">
+                  <p className="text-[10px] text-[#8D5B68] font-bold">Produk / Transaksi</p>
+                  <p className="font-black text-[#311B1E]">
                     {finishedProducts.length} / {transactions.length}
                   </p>
                 </div>
               </div>
 
               {feedback && (
-                <p className="text-xs text-center font-bold text-amber-700 bg-amber-50 p-2 rounded-xl border border-amber-200">
+                <p className="text-xs text-center font-bold text-[#C2185B] bg-[#FFEBEF] p-2 rounded-xl border border-[#F8BBD0]">
                   {feedback}
                 </p>
               )}
             </div>
 
             {/* Actions */}
-            <div className="pt-2 border-t border-[#EFE4DA] flex flex-col gap-2">
+            <div className="pt-2 border-t border-[#F8BBD0] flex flex-col gap-2">
               <button
                 onClick={handleSync}
                 disabled={isSupabaseLoading}
-                className="w-full flex items-center justify-center gap-2 py-2 px-3 bg-[#FAF7F2] hover:bg-[#FFF3E0] text-[#3E2723] rounded-2xl text-xs font-bold border border-[#EFE4DA] transition-all disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-2 py-2 px-3 bg-[#FFEBEF]/60 hover:bg-[#FFEBEF] text-[#311B1E] rounded-2xl text-xs font-bold border border-[#F8BBD0] transition-all disabled:opacity-50"
               >
-                <RefreshCw className={cn('w-3.5 h-3.5', isSupabaseLoading && 'animate-spin')} />
+                <RefreshCw className={cn('w-3.5 h-3.5', isSupabaseLoading && 'animate-spin text-[#C2185B]')} />
                 <span>Tarik Ulang Data dari Supabase</span>
               </button>
 
               <button
                 onClick={handleSeed}
                 disabled={isSupabaseLoading}
-                className="w-full flex items-center justify-center gap-2 py-2 px-3 bg-gradient-to-r from-[#FFB300] to-[#FFA000] text-[#3E2723] rounded-2xl text-xs font-black shadow-xs hover:brightness-105 active:scale-95 transition-all disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-2 py-2 px-3 bg-gradient-to-r from-[#C2185B] to-[#D81B60] text-white rounded-2xl text-xs font-black shadow-xs hover:brightness-105 active:scale-95 transition-all disabled:opacity-50"
               >
                 <UploadCloud className="w-3.5 h-3.5" />
                 <span>Upload Data Sekarang ke Supabase</span>

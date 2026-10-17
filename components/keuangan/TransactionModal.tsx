@@ -106,29 +106,29 @@ export function TransactionModal({ isOpen, onClose, onSuccess }: TransactionModa
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/40 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="bg-white border-2 border-[#EFE4DA] rounded-3xl w-full max-w-md overflow-hidden shadow-2xl shadow-[#3E2723]/20 p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+      <div className="bg-white border-2 border-[#F8BBD0] rounded-3xl w-full max-w-md overflow-hidden shadow-2xl shadow-[#C2185B]/10 p-6 space-y-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between pb-2 border-b border-[#EFE4DA]">
+        <div className="flex items-center justify-between pb-2 border-b border-[#F8BBD0]">
           <div className="flex items-center gap-2">
-            <span className="p-1.5 rounded-xl bg-blue-100 text-blue-700">
-              <Receipt className="w-4 h-4" />
+            <span className="p-1.5 rounded-xl bg-[#FFEBEF] text-[#C2185B]">
+              <Receipt className="w-4 h-4 text-[#C2185B]" />
             </span>
-            <h3 className="font-black text-[#3E2723] text-base">Catat Transaksi Penjualan</h3>
+            <h3 className="font-black text-[#311B1E] text-base">Catat Transaksi Penjualan</h3>
           </div>
           <button
             type="button"
             onClick={handleClose}
-            className="w-8 h-8 rounded-full bg-[#FAF7F2] text-[#6D4C41] flex items-center justify-center hover:bg-stone-200 transition-colors"
+            className="w-8 h-8 rounded-full bg-[#FFEBEF] text-[#8D5B68] flex items-center justify-center hover:bg-[#F8BBD0]/50 transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Catatan Aliran Data */}
-        <div className="p-3 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2 font-medium">
+        <div className="p-3 rounded-2xl bg-[#FFEBEF]/60 border border-[#F8BBD0] text-[#8D5B68] text-xs flex items-center gap-2 font-medium">
           <span className="text-base shrink-0">💡</span>
           <span>
-            <strong>Informasi:</strong> Harga jual diatur di sini, dan stok produk jadi yang dipilih otomatis berkurang saat transaksi disimpan.
+            <strong className="text-[#311B1E]">Informasi:</strong> Harga jual diatur di sini, dan stok produk jadi yang dipilih otomatis berkurang saat transaksi disimpan.
           </span>
         </div>
 
@@ -136,14 +136,14 @@ export function TransactionModal({ isOpen, onClose, onSuccess }: TransactionModa
           {/* Pilih Produk Jadi Ready (Untuk Pengurangan Stok Otomatis) */}
           {finishedProducts.length > 0 && (
             <div>
-              <label className="block text-xs font-black text-[#3E2723] mb-1 flex items-center gap-1.5">
+              <label className="block text-xs font-black text-[#311B1E] mb-1 flex items-center gap-1.5">
                 <ShoppingBag className="w-3.5 h-3.5 text-[#2E7D32]" />
                 <span>Pilih Produk Ready (Stok Terpotong Otomatis)</span>
               </label>
               <select
                 value={selectedProductId}
                 onChange={(e) => handleProductSelect(e.target.value)}
-                className="w-full bg-[#FAF7F2] border-2 border-[#EFE4DA] focus:border-blue-500 rounded-2xl px-3 py-2.5 text-xs text-[#3E2723] font-bold focus:outline-none"
+                className="w-full bg-[#FFEBEF]/40 border-2 border-[#F8BBD0] focus:border-[#C2185B] rounded-2xl px-3 py-2.5 text-xs text-[#311B1E] font-bold focus:outline-none"
               >
                 <option value="">-- Pilih Produk Ready (Opsional) --</option>
                 {readyProducts.map((p) => (
@@ -153,7 +153,7 @@ export function TransactionModal({ isOpen, onClose, onSuccess }: TransactionModa
                 ))}
               </select>
               {readyProducts.length === 0 && (
-                <p className="mt-1 text-[11px] text-amber-700 font-semibold">
+                <p className="mt-1 text-[11px] text-[#C2185B] font-semibold">
                   Semua stok produk saat ini sedang kosong (0 pcs).
                 </p>
               )}
@@ -180,11 +180,11 @@ export function TransactionModal({ isOpen, onClose, onSuccess }: TransactionModa
           {/* Kategori Penjualan */}
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label className="block text-xs font-black text-[#3E2723]">
+              <label className="block text-xs font-black text-[#311B1E]">
                 Kategori Penjualan
               </label>
               {selectedProduct && (
-                <span className="text-[10px] font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded-full flex items-center gap-1 border border-amber-200">
+                <span className="text-[10px] font-bold text-[#C2185B] bg-[#FFEBEF] px-2 py-0.5 rounded-full flex items-center gap-1 border border-[#F8BBD0]">
                   🔒 Terkunci (Mengikuti Produk)
                 </span>
               )}
@@ -195,8 +195,8 @@ export function TransactionModal({ isOpen, onClose, onSuccess }: TransactionModa
               disabled={Boolean(selectedProductId)}
               className={`w-full border-2 rounded-2xl px-3 py-2.5 text-xs font-bold focus:outline-none transition-all ${
                 selectedProductId
-                  ? 'bg-stone-100 border-[#EFE4DA] text-stone-600 cursor-not-allowed opacity-90'
-                  : 'bg-[#FAF7F2] border-[#EFE4DA] focus:border-blue-500 text-[#3E2723]'
+                  ? 'bg-stone-100 border-[#F8BBD0] text-stone-600 cursor-not-allowed opacity-90'
+                  : 'bg-[#FFEBEF]/40 border-[#F8BBD0] focus:border-[#C2185B] text-[#311B1E]'
               }`}
             >
               {category && !productCategories.some((cat) => cat.name === category) && category !== 'Penjualan Toko' && category !== 'Pesanan Khusus / Katering' && category !== 'Lainnya' && (
@@ -212,7 +212,7 @@ export function TransactionModal({ isOpen, onClose, onSuccess }: TransactionModa
               <option value="Lainnya">Lainnya</option>
             </select>
             {selectedProduct && (
-              <p className="mt-1 text-[10px] text-[#8D6E63] font-medium">
+              <p className="mt-1 text-[10px] text-[#8D5B68] font-medium">
                 Kategori terkunci otomatis sesuai produk <strong>{selectedProduct.name}</strong> ({selectedProduct.category}).
               </p>
             )}
@@ -220,7 +220,7 @@ export function TransactionModal({ isOpen, onClose, onSuccess }: TransactionModa
 
           {/* Keterangan */}
           <div>
-            <label className="block text-xs font-black text-[#3E2723] mb-1">
+            <label className="block text-xs font-black text-[#311B1E] mb-1">
               Keterangan Transaksi <span className="text-rose-600">*</span>
             </label>
             <input
@@ -229,13 +229,13 @@ export function TransactionModal({ isOpen, onClose, onSuccess }: TransactionModa
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Contoh: Penjualan Roti Abon, pesanan katering"
-              className="w-full bg-[#FAF7F2] border-2 border-[#EFE4DA] focus:border-blue-500 rounded-2xl px-4 py-2.5 text-xs text-[#3E2723] font-bold focus:outline-none placeholder-[#A1887F]"
+              className="w-full bg-[#FFEBEF]/40 border-2 border-[#F8BBD0] focus:border-[#C2185B] rounded-2xl px-4 py-2.5 text-xs text-[#311B1E] font-bold focus:outline-none placeholder-[#8D5B68]"
             />
           </div>
 
           {/* Jumlah / Kuantitas Barang */}
           <div>
-            <label className="block text-xs font-black text-[#3E2723] mb-1">
+            <label className="block text-xs font-black text-[#311B1E] mb-1">
               Jumlah / Kuantitas {selectedProduct ? `(${selectedProduct.unit})` : 'Barang'}
             </label>
             <input
@@ -254,14 +254,14 @@ export function TransactionModal({ isOpen, onClose, onSuccess }: TransactionModa
                 }
               }}
               placeholder={selectedProduct ? `Contoh: 5 ${selectedProduct.unit}` : 'Contoh: 5 pcs, 2 box'}
-              className="w-full bg-[#FAF7F2] border-2 border-[#EFE4DA] focus:border-blue-500 rounded-2xl px-4 py-2.5 text-xs text-[#3E2723] font-bold focus:outline-none placeholder-[#A1887F]"
+              className="w-full bg-[#FFEBEF]/40 border-2 border-[#F8BBD0] focus:border-[#C2185B] rounded-2xl px-4 py-2.5 text-xs text-[#311B1E] font-bold focus:outline-none placeholder-[#8D5B68]"
             />
           </div>
 
           {/* Total Penjualan & Kalkulator Cepat */}
           <div className="space-y-2">
             <div>
-              <label className="block text-xs font-black text-[#3E2723] mb-1">
+              <label className="block text-xs font-black text-[#311B1E] mb-1">
                 Total Nominal Penjualan (Rp) <span className="text-rose-600">*</span>
               </label>
               <input
@@ -271,26 +271,26 @@ export function TransactionModal({ isOpen, onClose, onSuccess }: TransactionModa
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="Contoh: 50000"
-                className="w-full bg-[#FAF7F2] border-2 border-[#EFE4DA] focus:border-blue-500 rounded-2xl px-4 py-2.5 text-sm text-[#3E2723] font-black focus:outline-none"
+                className="w-full bg-[#FFEBEF]/40 border-2 border-[#F8BBD0] focus:border-[#C2185B] rounded-2xl px-4 py-2.5 text-sm text-[#311B1E] font-black focus:outline-none"
               />
 
               {/* Live Standard Rupiah Preview */}
               {amount && Number(amount) > 0 ? (
-                <div className="mt-1.5 px-3 py-1.5 rounded-xl bg-blue-50 border border-blue-200 text-xs font-bold text-blue-800 flex items-center justify-between">
-                  <span className="text-[11px] text-blue-600 font-medium">Nominal Standar:</span>
-                  <span className="font-black text-sm text-blue-700">{formatRupiah(Number(amount))}</span>
+                <div className="mt-1.5 px-3 py-1.5 rounded-xl bg-[#FFEBEF] border border-[#F8BBD0] text-xs font-bold text-[#C2185B] flex items-center justify-between">
+                  <span className="text-[11px] text-[#8D5B68] font-medium">Nominal Standar:</span>
+                  <span className="font-black text-sm text-[#C2185B]">{formatRupiah(Number(amount))}</span>
                 </div>
               ) : null}
             </div>
 
             {/* Bantuan Hitung Cepat (Harga Satuan × Pcs) */}
-            <div className="p-3 rounded-2xl bg-[#FAF7F2] border border-[#EFE4DA] space-y-1.5">
-              <span className="text-[10px] font-bold text-[#8D6E63] uppercase tracking-wide block">
+            <div className="p-3 rounded-2xl bg-[#FFEBEF]/30 border border-[#F8BBD0] space-y-1.5">
+              <span className="text-[10px] font-bold text-[#8D5B68] uppercase tracking-wide block">
                 Atur Harga Jual & Hitung Otomatis:
               </span>
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <span className="text-[10px] text-[#8D6E63] font-bold block">Harga per Item (Rp)</span>
+                  <span className="text-[10px] text-[#8D5B68] font-bold block">Harga per Item (Rp)</span>
                   <input
                     type="number"
                     min="0"
@@ -305,11 +305,11 @@ export function TransactionModal({ isOpen, onClose, onSuccess }: TransactionModa
                       }
                     }}
                     placeholder="10000"
-                    className="w-full bg-white border border-[#EFE4DA] focus:border-blue-400 rounded-xl px-2.5 py-1.5 text-xs text-[#3E2723] font-bold focus:outline-none mt-0.5"
+                    className="w-full bg-white border border-[#F8BBD0] focus:border-[#C2185B] rounded-xl px-2.5 py-1.5 text-xs text-[#311B1E] font-bold focus:outline-none mt-0.5"
                   />
                 </div>
                 <div>
-                  <span className="text-[10px] text-[#8D6E63] font-bold block">Jumlah Qty</span>
+                  <span className="text-[10px] text-[#8D5B68] font-bold block">Jumlah Qty</span>
                   <input
                     type="number"
                     min="0"
@@ -326,12 +326,12 @@ export function TransactionModal({ isOpen, onClose, onSuccess }: TransactionModa
                       }
                     }}
                     placeholder="5"
-                    className="w-full bg-white border border-[#EFE4DA] focus:border-blue-400 rounded-xl px-2.5 py-1.5 text-xs text-[#3E2723] font-bold focus:outline-none mt-0.5"
+                    className="w-full bg-white border border-[#F8BBD0] focus:border-[#C2185B] rounded-xl px-2.5 py-1.5 text-xs text-[#311B1E] font-bold focus:outline-none mt-0.5"
                   />
                 </div>
               </div>
               {calculatedTotal > 0 && (
-                <p className="text-[11px] text-blue-700 font-bold mt-1 text-right flex items-center justify-end gap-1">
+                <p className="text-[11px] text-[#C2185B] font-bold mt-1 text-right flex items-center justify-end gap-1">
                   <span>💡 Terhitung otomatis:</span>
                   <span className="font-black">{formatRupiah(calculatedTotal)}</span>
                 </p>
@@ -351,18 +351,18 @@ export function TransactionModal({ isOpen, onClose, onSuccess }: TransactionModa
           )}
 
           {/* Action Buttons */}
-          <div className="pt-3 border-t border-[#EFE4DA] flex items-center justify-end gap-2">
+          <div className="pt-3 border-t border-[#F8BBD0] flex items-center justify-end gap-2">
             <button
               type="button"
               onClick={handleClose}
-              className="px-4 py-2.5 rounded-2xl border border-[#EFE4DA] text-xs font-black text-[#8D6E63] hover:bg-stone-50 transition-colors"
+              className="px-4 py-2.5 rounded-2xl border border-[#F8BBD0] text-xs font-black text-[#8D5B68] hover:bg-[#FFEBEF]/40 transition-colors"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={exceedsStock}
-              className="px-5 py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-black shadow-md shadow-blue-500/20 active:scale-95 transition-all flex items-center gap-1.5"
+              className="px-5 py-2.5 rounded-2xl bg-[#C2185B] hover:bg-[#AD1457] disabled:opacity-50 disabled:cursor-not-allowed text-white text-xs font-black shadow-md shadow-[#C2185B]/20 active:scale-95 transition-all flex items-center gap-1.5"
             >
               <Check className="w-4 h-4 stroke-[3]" />
               <span>Simpan Transaksi</span>
