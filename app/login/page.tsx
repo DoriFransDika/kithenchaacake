@@ -11,7 +11,8 @@ import {
   EyeOff,
   ArrowRight,
   ShieldAlert,
-  Loader2
+  Loader2,
+  Clock
 } from 'lucide-react';
 import { useStore } from '@/lib/store';
 
@@ -28,6 +29,17 @@ export default function LoginPage() {
   // Security: Brute-force protection with cooldown lockout
   const [failedAttempts, setFailedAttempts] = useState(0);
   const [lockoutRemaining, setLockoutRemaining] = useState(0);
+  const [timeoutNotice, setTimeoutNotice] = useState(false);
+
+  // Detect auto-logout due to 5 minutes of inactivity
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('reason') === 'timeout') {
+        setTimeoutNotice(true);
+      }
+    }
+  }, []);
 
   // Auto-redirect if already logged in
   useEffect(() => {
@@ -112,6 +124,14 @@ export default function LoginPage() {
             Selamat Menikmati • Kerinci, Jambi
           </p>
         </div>
+
+        {/* Auto-logout Timeout Notice */}
+        {timeoutNotice && (
+          <div className="mb-4 p-3.5 rounded-2xl bg-amber-50 border border-amber-300 text-amber-900 text-xs font-bold flex items-center gap-2.5 animate-in fade-in duration-200">
+            <Clock className="w-4 h-4 shrink-0 text-amber-600" />
+            <span>Sesi Anda otomatis berakhir karena 5 menit tidak ada aktivitas. Silakan masuk kembali.</span>
+          </div>
+        )}
 
         {/* Error Alert */}
         {errorMsg && (

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
@@ -17,16 +17,13 @@ import {
 } from 'lucide-react';
 import { useStore } from '@/lib/store';
 import { cn } from '@/lib/utils';
+import { LogoutModal } from '@/components/common/LogoutModal';
 
 export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const { user, logout, summary } = useStore();
-
-  const handleLogout = () => {
-    logout();
-    router.replace('/login');
-  };
+  const [isLogoutOpen, setIsLogoutOpen] = useState(false);
 
   const navItems = [
     {
@@ -156,13 +153,19 @@ export function Sidebar() {
       {/* Logout button */}
       <div className="p-4 border-t border-[#F8BBD0]">
         <button
-          onClick={handleLogout}
+          type="button"
+          onClick={() => setIsLogoutOpen(true)}
           className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black text-[#8D5B68] hover:text-rose-700 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition-all duration-200"
         >
           <LogOut className="w-4 h-4" />
           <span>Keluar Sistem</span>
         </button>
       </div>
+
+      <LogoutModal
+        isOpen={isLogoutOpen}
+        onClose={() => setIsLogoutOpen(false)}
+      />
     </aside>
   );
 }

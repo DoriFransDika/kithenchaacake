@@ -3,14 +3,16 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Bell, Sparkles, AlertTriangle, CheckCircle2, X, Heart } from 'lucide-react';
+import { Bell, Sparkles, AlertTriangle, CheckCircle2, X, Heart, LogOut } from 'lucide-react';
 import { useStore } from '@/lib/store';
 import { cn } from '@/lib/utils';
 import { SupabaseSyncButton } from '@/components/common/SupabaseSyncButton';
+import { LogoutModal } from '@/components/common/LogoutModal';
 
 export function Header() {
   const { notifications, markNotificationRead } = useStore();
   const [showNotifications, setShowNotifications] = useState(false);
+  const [isLogoutOpen, setIsLogoutOpen] = useState(false);
 
   const unreadCount = notifications.length;
 
@@ -127,8 +129,25 @@ export function Header() {
               </div>
             )}
           </div>
+
+          {/* Logout Action Button */}
+          <button
+            type="button"
+            onClick={() => setIsLogoutOpen(true)}
+            className="h-10 px-3 sm:px-3.5 rounded-2xl flex items-center gap-1.5 border border-rose-200 bg-rose-50/70 hover:bg-rose-100 text-rose-700 transition-all duration-200 text-xs font-black shadow-xs active:scale-95 shrink-0"
+            title="Keluar dari sistem"
+          >
+            <LogOut className="w-4 h-4 text-rose-600 shrink-0" />
+            <span className="hidden sm:inline">Keluar</span>
+          </button>
         </div>
       </header>
+
+      {/* Logout Confirmation Modal */}
+      <LogoutModal
+        isOpen={isLogoutOpen}
+        onClose={() => setIsLogoutOpen(false)}
+      />
 
       {/* Backdrop */}
       {showNotifications && (
