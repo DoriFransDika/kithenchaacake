@@ -49,6 +49,7 @@ interface StoreContextType {
   user: UserSession;
   login: (email: string, pass: string) => Promise<boolean>;
   logout: () => void;
+  isLoaded: boolean;
   categories: Category[];
   rawMaterials: RawMaterial[];
   finishedProducts: FinishedProduct[];
@@ -107,8 +108,8 @@ const STORAGE_KEYS = {
 export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<UserSession>({
     email: '',
-    name: 'Chaacake Chef & Owner',
-    role: 'Owner',
+    name: '',
+    role: '',
     isAuthenticated: false,
   });
 
@@ -287,7 +288,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       if (!authError && authData.user) {
         const session: UserSession = {
           email: authData.user.email || cleanEmail,
-          name: (authData.user.user_metadata?.name as string) || 'Chaacake Chef & Owner',
+          name: (authData.user.user_metadata?.name as string) || 'Icha - Owner Kitchen Chaacake',
           role: (authData.user.user_metadata?.role as string) || 'Owner Utama',
           isAuthenticated: true,
         };
@@ -321,6 +322,11 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   };
 
   const logout = () => {
+    try {
+      supabase.auth.signOut().catch(() => {});
+    } catch {
+      // ignore
+    }
     const session: UserSession = {
       email: '',
       name: '',
@@ -1064,6 +1070,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         user,
         login,
         logout,
+        isLoaded,
         categories,
         rawMaterials,
         finishedProducts,

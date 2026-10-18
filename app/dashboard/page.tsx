@@ -24,6 +24,8 @@ import { ItemModal } from '@/components/stok/ItemModal';
 import { formatRupiah, cleanTrxDescription } from '@/lib/utils';
 import { Check } from 'lucide-react';
 
+import { AuthGuard } from '@/components/auth/AuthGuard';
+
 export default function DashboardPage() {
   const { transactions } = useStore();
 
@@ -37,7 +39,8 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[url('/bg.jpg')] bg-cover bg-center bg-fixed bg-no-repeat text-[#311B1E] flex flex-col md:flex-row font-sans">
+    <AuthGuard>
+      <div className="min-h-screen bg-[url('/bg.jpg')] bg-cover bg-center bg-fixed bg-no-repeat text-[#311B1E] flex flex-col md:flex-row font-sans">
       {/* Sidebar for Tablet / Desktop */}
       <Sidebar />
 
@@ -204,5 +207,6 @@ export default function DashboardPage() {
         mode="material"
       />
     </div>
+    </AuthGuard>
   );
 }

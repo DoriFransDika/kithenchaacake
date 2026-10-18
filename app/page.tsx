@@ -16,8 +16,10 @@ import {
   Tags
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useStore } from '@/lib/store';
 
 export default function LandingPage() {
+  const { user } = useStore();
   const steps = [
     {
       num: '01',
@@ -80,10 +82,10 @@ export default function LandingPage() {
         </div>
 
         <Link
-          href="/login"
+          href={user.isAuthenticated ? '/dashboard' : '/login'}
           className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-white hover:bg-[#FFEBEF] border-2 border-[#F8BBD0] text-xs font-black text-[#311B1E] transition-all shadow-xs"
         >
-          <span>Masuk Sistem</span>
+          <span>{user.isAuthenticated ? 'Ke Dashboard' : 'Masuk Sistem'}</span>
           <ArrowRight className="w-3.5 h-3.5 text-[#C2185B]" />
         </Link>
       </header>
@@ -126,21 +128,14 @@ export default function LandingPage() {
           Sistem manajemen cake & bakery privat: kontrol resep adonan, pantau stok bahan baku, etalase kue siap saji, dan pencatatan laba bersih otomatis.
         </p>
 
-        {/* CTA Buttons with Rose Accent */}
-        <div className="mt-8 flex flex-col sm:flex-row items-center gap-3.5 w-full sm:w-auto">
+        {/* CTA Button with Rose Accent */}
+        <div className="mt-8 flex items-center justify-center w-full sm:w-auto">
           <Link
-            href="/login"
+            href={user.isAuthenticated ? '/dashboard' : '/login'}
             className="w-full sm:w-auto flex items-center justify-center gap-2.5 px-9 py-3.5 rounded-3xl bg-gradient-to-r from-[#C2185B] to-[#D81B60] text-white font-black text-sm shadow-lg shadow-[#C2185B]/30 hover:brightness-105 active:scale-95 transition-all"
           >
-            <span>Masuk ke Aplikasi</span>
+            <span>{user.isAuthenticated ? 'Buka Dashboard Anda' : 'Masuk ke Aplikasi (Login Pengelola)'}</span>
             <ArrowRight className="w-4 h-4 stroke-[3]" />
-          </Link>
-
-          <Link
-            href="/dashboard"
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-7 py-3.5 rounded-3xl bg-white hover:bg-[#FFEBEF] border-2 border-[#F8BBD0] text-[#311B1E] font-black text-sm shadow-xs transition-all"
-          >
-            <span>Buka Dashboard Langsung</span>
           </Link>
         </div>
 

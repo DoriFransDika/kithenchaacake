@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard,
   Boxes,
@@ -20,7 +20,13 @@ import { cn } from '@/lib/utils';
 
 export function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
   const { user, logout, summary } = useStore();
+
+  const handleLogout = () => {
+    logout();
+    router.replace('/login');
+  };
 
   const navItems = [
     {
@@ -150,7 +156,7 @@ export function Sidebar() {
       {/* Logout button */}
       <div className="p-4 border-t border-[#F8BBD0]">
         <button
-          onClick={logout}
+          onClick={handleLogout}
           className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-2xl text-xs font-black text-[#8D5B68] hover:text-rose-700 hover:bg-rose-50 border border-transparent hover:border-rose-200 transition-all duration-200"
         >
           <LogOut className="w-4 h-4" />

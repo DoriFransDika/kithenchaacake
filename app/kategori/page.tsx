@@ -31,6 +31,7 @@ import {
 } from '@/components/common/CategoryIcon';
 import { Category, UnitGroup } from '@/types';
 import { getCategoryUnitGroup } from '@/lib/utils';
+import { AuthGuard } from '@/components/auth/AuthGuard';
 
 export default function CategoryManagerPage() {
   const {
@@ -130,7 +131,8 @@ export default function CategoryManagerPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[url('/bg.jpg')] bg-cover bg-center bg-fixed bg-no-repeat text-[#311B1E] flex flex-col md:flex-row font-sans">
+    <AuthGuard>
+      <div className="min-h-screen bg-[url('/bg.jpg')] bg-cover bg-center bg-fixed bg-no-repeat text-[#311B1E] flex flex-col md:flex-row font-sans">
       <Sidebar />
 
       <div className="flex-1 flex flex-col min-w-0 pb-28 md:pb-12">
@@ -493,5 +495,6 @@ export default function CategoryManagerPage() {
         </div>
       )}
     </div>
+    </AuthGuard>
   );
 }

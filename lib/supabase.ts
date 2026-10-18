@@ -592,7 +592,7 @@ export const supabaseService = {
           success: true,
           user: {
             email: data.email,
-            name: data.name || 'Chaacake Chef & Owner',
+            name: data.name || 'Icha - Owner Kitchen Chaacake',
             role: data.role || 'Owner Utama',
           },
         };

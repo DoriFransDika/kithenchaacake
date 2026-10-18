@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -11,13 +11,13 @@ import {
   EyeOff,
   ArrowRight,
   ShieldAlert,
-  Heart
+  Loader2
 } from 'lucide-react';
 import { useStore } from '@/lib/store';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { login } = useStore();
+  const { login, user, isLoaded } = useStore();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -25,17 +25,58 @@ export default function LoginPage() {
   const [errorMsg, setErrorMsg] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  // Security: Brute-force protection with cooldown lockout
+  const [failedAttempts, setFailedAttempts] = useState(0);
+  const [lockoutRemaining, setLockoutRemaining] = useState(0);
+
+  // Auto-redirect if already logged in
+  useEffect(() => {
+    if (isLoaded && user.isAuthenticated) {
+      router.replace('/dashboard');
+    }
+  }, [isLoaded, user.isAuthenticated, router]);
+
+  // Lockout countdown timer
+  useEffect(() => {
+    if (lockoutRemaining <= 0) return;
+    const timer = setInterval(() => {
+      setLockoutRemaining((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [lockoutRemaining]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (lockoutRemaining > 0) {
+      setErrorMsg(`Akses dibatasi sementara demi keamanan. Coba lagi dalam ${lockoutRemaining} detik.`);
+      return;
+    }
+
     setErrorMsg('');
     setIsLoading(true);
 
     try {
       const ok = await login(email, password);
       if (ok) {
+        setFailedAttempts(0);
         router.push('/dashboard');
       } else {
-        setErrorMsg('Email atau Password salah! Periksa kembali akun Anda.');
+        const nextAttempts = failedAttempts + 1;
+        setFailedAttempts(nextAttempts);
+
+        if (nextAttempts >= 5) {
+          setLockoutRemaining(30);
+          setErrorMsg('Terlalu banyak percobaan gagal (5x). Akun dikunci sementara selama 30 detik.');
+        } else {
+          setErrorMsg(`Email atau Kata Sandi salah! Percobaan ${nextAttempts}/5.`);
+        }
         setIsLoading(false);
       }
     } catch {
@@ -91,10 +132,15 @@ export default function LoginPage() {
               <input
                 type="email"
                 required
+                autoComplete="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="nama@email.com"
-                className="w-full bg-white border border-[#F8BBD0] focus:border-[#C2185B] focus:ring-2 focus:ring-[#C2185B]/15 rounded-2xl pl-10 pr-4 py-3 text-xs sm:text-sm text-[#311B1E] font-bold placeholder-[#A1887F] focus:outline-none transition-all"
+                disabled={isLoading || lockoutRemaining > 0}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (errorMsg) setErrorMsg('');
+                }}
+                placeholder="Masukkan email pengelola"
+                className="w-full bg-white border border-[#F8BBD0] focus:border-[#C2185B] focus:ring-2 focus:ring-[#C2185B]/15 rounded-2xl pl-10 pr-4 py-3 text-xs sm:text-sm text-[#311B1E] font-bold placeholder-[#A1887F] focus:outline-none transition-all disabled:opacity-60"
               />
             </div>
           </div>
@@ -108,10 +154,15 @@ export default function LoginPage() {
               <input
                 type={showPassword ? 'text' : 'password'}
                 required
+                autoComplete="current-password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••••••"
-                className="w-full bg-white border border-[#F8BBD0] focus:border-[#C2185B] focus:ring-2 focus:ring-[#C2185B]/15 rounded-2xl pl-10 pr-10 py-3 text-xs sm:text-sm text-[#311B1E] font-bold placeholder-[#A1887F] focus:outline-none transition-all"
+                disabled={isLoading || lockoutRemaining > 0}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  if (errorMsg) setErrorMsg('');
+                }}
+                placeholder="Masukkan kata sandi"
+                className="w-full bg-white border border-[#F8BBD0] focus:border-[#C2185B] focus:ring-2 focus:ring-[#C2185B]/15 rounded-2xl pl-10 pr-10 py-3 text-xs sm:text-sm text-[#311B1E] font-bold placeholder-[#A1887F] focus:outline-none transition-all disabled:opacity-60"
               />
               <button
                 type="button"
@@ -123,14 +174,19 @@ export default function LoginPage() {
             </div>
           </div>
 
-          {/* Rose CTA Action Button */}
+          {/* Action Button */}
           <button
             type="submit"
-            disabled={isLoading}
-            className="w-full flex items-center justify-center gap-2 py-3.5 px-4 rounded-3xl bg-gradient-to-r from-[#C2185B] to-[#D81B60] text-white font-black text-xs sm:text-sm shadow-md shadow-[#C2185B]/30 hover:brightness-105 active:scale-98 transition-all"
+            disabled={isLoading || lockoutRemaining > 0}
+            className="w-full flex items-center justify-center gap-2 py-3.5 px-4 rounded-3xl bg-gradient-to-r from-[#C2185B] to-[#D81B60] text-white font-black text-xs sm:text-sm shadow-md shadow-[#C2185B]/30 hover:brightness-105 active:scale-98 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {isLoading ? (
-              <span>Membuka Kitchen Chaacake...</span>
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span>Memverifikasi Akun...</span>
+              </>
+            ) : lockoutRemaining > 0 ? (
+              <span>Terkunci ({lockoutRemaining}d)</span>
             ) : (
               <>
                 <span>Masuk ke Dashboard</span>
