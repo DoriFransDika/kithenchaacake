@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { StoreProvider } from '@/lib/store';
+import { FloatingToast } from '@/components/common/FloatingToast';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -31,6 +32,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col selection:bg-[#C2185B]/25 selection:text-[#311B1E]">
         <StoreProvider>
           {children}
+          <FloatingToast />
         </StoreProvider>
       </body>
     </html>

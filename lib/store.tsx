@@ -733,6 +733,22 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     };
     setTransactions((prev) => [newTrx, ...prev]);
     supabaseService.insertTransaction(newTrx).catch(console.error);
+
+    const toastMsg = existing
+      ? `Stok ${existing.name} berhasil diakumulasikan (+${mat.stock} ${mat.unit}).`
+      : `Bahan baku ${cleanName || mat.category} berhasil ditambahkan (+${mat.stock} ${mat.unit}).`;
+    showToast(toastMsg, 'success');
+
+    const newNotif: ActivityNotification = {
+      id: `notif-${Date.now()}`,
+      type: 'expense',
+      title: `Restok Bahan: ${cleanName || mat.category}`,
+      message: `${toastMsg} Dicatat ke pembukuan kas (${formatRupiah(finalCost)}).`,
+      time: 'Baru saja',
+      severity: 'info',
+    };
+    setNotifications((prev) => [newNotif, ...prev]);
+    supabaseService.insertNotification(newNotif).catch(console.error);
   };
 
   const reduceCategoryStock = (
@@ -740,21 +756,55 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     amountKg: number,
     reason: string
   ): { success: boolean; message: string } => {
+    if (!amountKg || amountKg <= 0) {
+      const msg = 'Jumlah pengurangan stok harus lebih dari 0!';
+      showToast(msg, 'error');
+      return { success: false, message: msg };
+    }
+
     const cleanTarget = (targetIdentifier || '').toLowerCase().trim();
-    const target = rawMaterials.find(
-      (m) =>
-        m.id === targetIdentifier ||
-        m.categoryId === targetIdentifier ||
-        m.category.toLowerCase().trim() === cleanTarget ||
-        m.name.toLowerCase().trim() === cleanTarget
+    const matchedCategory = categories.find(
+      (c) => c.id === targetIdentifier || c.name.toLowerCase().trim() === cleanTarget
     );
 
+    // 1. Cari bahan baku berdasarkan ID bahan baku, nama bahan, categoryId, atau nama kategori
+    let target = rawMaterials.find(
+      (m) =>
+        m.id === targetIdentifier ||
+        m.name.toLowerCase().trim() === cleanTarget ||
+        m.categoryId === targetIdentifier ||
+        m.category.toLowerCase().trim() === cleanTarget ||
+        (matchedCategory &&
+          (m.categoryId === matchedCategory.id ||
+            m.category.toLowerCase().trim() === matchedCategory.name.toLowerCase().trim()))
+    );
+
+    // 2. Jika belum ditemukan tetapi kategori ditemukan, ambil bahan baku pertama dalam kategori tersebut
+    if (!target && matchedCategory) {
+      target =
+        rawMaterials.find(
+          (m) =>
+            (m.categoryId === matchedCategory.id ||
+              m.category.toLowerCase().trim() === matchedCategory.name.toLowerCase().trim()) &&
+            m.stock > 0
+        ) ||
+        rawMaterials.find(
+          (m) =>
+            m.categoryId === matchedCategory.id ||
+            m.category.toLowerCase().trim() === matchedCategory.name.toLowerCase().trim()
+        );
+    }
+
     if (!target) {
-      return { success: false, message: 'Bahan baku atau kategori tidak ditemukan!' };
+      const msg = 'Bahan baku atau kategori tidak ditemukan di persediaan!';
+      showToast(msg, 'error');
+      return { success: false, message: msg };
     }
 
     if (target.stock <= 0) {
-      return { success: false, message: `Stok ${target.name || target.category} sudah habis (0 ${target.unit}).` };
+      const msg = `Stok ${target.name || target.category} sudah habis (0 ${target.unit}).`;
+      showToast(msg, 'error');
+      return { success: false, message: msg };
     }
 
     const today = new Date().toISOString().split('T')[0];
@@ -778,9 +828,11 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     setNotifications((prev) => [newNotif, ...prev]);
     supabaseService.insertNotification(newNotif).catch(console.error);
 
+    const successMsg = `Stok ${displayName} berhasil dikurangi ${amountKg} ${target.unit}. Tersisa ${newStock} ${target.unit}.`;
+    showToast(successMsg, 'success');
     return {
       success: true,
-      message: `Stok ${displayName} berhasil dikurangi ${amountKg} ${target.unit}. Tersisa ${newStock} ${target.unit}.`,
+      message: successMsg,
     };
   };
 
@@ -898,9 +950,21 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     const cat = categories.find((c) => c.id === input.categoryId && c.type === 'product');
     const minStock = cat?.minStock ?? 5;
 
-    if (!cat) return { success: false, message: 'Pilih kategori produk terlebih dahulu!' };
-    if (!name) return { success: false, message: 'Nama produk wajib diisi!' };
-    if (!Number.isFinite(qty) || qty <= 0) return { success: false, message: 'Jumlah stok harus berupa angka bulat lebih dari 0!' };
+    if (!cat) {
+      const msg = 'Pilih kategori produk terlebih dahulu!';
+      showToast(msg, 'error');
+      return { success: false, message: msg };
+    }
+    if (!name) {
+      const msg = 'Nama produk wajib diisi!';
+      showToast(msg, 'error');
+      return { success: false, message: msg };
+    }
+    if (!Number.isFinite(qty) || qty <= 0) {
+      const msg = 'Jumlah stok harus berupa angka bulat lebih dari 0!';
+      showToast(msg, 'error');
+      return { success: false, message: msg };
+    }
 
     const existing = finishedProducts.find(
       (p) => p.name.toLowerCase().trim() === name.toLowerCase()
@@ -941,11 +1005,14 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     setNotifications((prev) => [newNotif, ...prev]);
     supabaseService.insertNotification(newNotif).catch(console.error);
 
+    const successMsg = existing
+      ? `Stok ${name} ditambah +${qty} pcs (total ${resultStock} pcs).`
+      : `Produk ${name} ditambahkan dengan stok ${qty} pcs.`;
+    showToast(successMsg, 'success');
+
     return {
       success: true,
-      message: existing
-        ? `Stok ${name} ditambah +${qty} pcs (total ${resultStock} pcs).`
-        : `Produk ${name} ditambahkan dengan stok ${qty} pcs.`,
+      message: successMsg,
     };
   };
 
