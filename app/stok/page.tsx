@@ -36,7 +36,7 @@ import { CategoryIcon } from '@/components/common/CategoryIcon';
 import { CategoryManageModal } from '@/components/kategori/CategoryManageModal';
 import { DeleteDatabaseModal } from '@/components/common/DeleteDatabaseModal';
 import { ConfirmSyncDeleteModal } from '@/components/common/ConfirmSyncDeleteModal';
-import { getCategoryDisplayUnit } from '@/lib/utils';
+import { getCategoryDisplayUnit, getItemMinStock } from '@/lib/utils';
 import { RawMaterial, FinishedProduct, Category } from '@/types';
 import { AuthGuard } from '@/components/auth/AuthGuard';
 
@@ -102,7 +102,7 @@ export default function StockPage() {
     activeTab === 'materials' ? c.type === 'material' : c.type === 'product'
   );
 
-  // 1. Daftar Bahan Baku Dapur: Tampil langsung per merek/varian dengan label kategori di atasnya
+  // 1. Daftar Bahan Baku Dapur: Murni Alfabetis (A–Z) & Filter Kritis Dinamis (Stok <= MinStock atau 0)
   const filteredMaterialsList = React.useMemo(() => {
     const q = searchQuery.toLowerCase().trim();
     return rawMaterials
@@ -116,23 +116,18 @@ export default function StockPage() {
         const matchesSearch =
           !q || m.name.toLowerCase().includes(q) || m.category.toLowerCase().includes(q);
 
-        const isLow = m.stock <= m.minStock;
+        const minStock = getItemMinStock(m, categories);
+        const isCritical = m.stock <= minStock;
         const matchesStatus =
           stockStatusFilter === 'all'
             ? true
             : stockStatusFilter === 'low'
-            ? isLow
-            : !isLow;
+            ? isCritical
+            : !isCritical;
 
         return matchesCat && matchesSearch && matchesStatus;
       })
-      .sort((a, b) => {
-        // Habis/kritis paling atas, lalu alfabetis
-        const aLow = a.stock <= a.minStock ? 0 : 1;
-        const bLow = b.stock <= b.minStock ? 0 : 1;
-        if (aLow !== bLow) return aLow - bLow;
-        return a.name.localeCompare(b.name);
-      });
+      .sort((a, b) => a.name.localeCompare(b.name, 'id', { sensitivity: 'base' }));
   }, [rawMaterials, selectedCategoryId, categories, searchQuery, stockStatusFilter]);
 
   const materialCounts = React.useMemo(() => {
@@ -145,8 +140,8 @@ export default function StockPage() {
     );
     return {
       all: inCat.length,
-      low: inCat.filter((m) => m.stock <= m.minStock).length,
-      safe: inCat.filter((m) => m.stock > m.minStock).length,
+      low: inCat.filter((m) => m.stock <= getItemMinStock(m, categories)).length,
+      safe: inCat.filter((m) => m.stock > getItemMinStock(m, categories)).length,
     };
   }, [rawMaterials, selectedCategoryId, categories]);
 
@@ -155,7 +150,7 @@ export default function StockPage() {
     setIsItemModalOpen(true);
   };
 
-  // 3. Daftar Produk Ready (langsung tampil per produk, difilter kategori + status + pencarian)
+  // 3. Daftar Produk Ready: Murni Alfabetis (A–Z) & Filter Kritis Dinamis (Stok <= MinStock atau 0)
   const readyProductsList = React.useMemo(() => {
     const q = searchQuery.toLowerCase().trim();
     return finishedProducts
@@ -163,15 +158,10 @@ export default function StockPage() {
         const matchesCat = selectedCategoryId === 'all' || p.categoryId === selectedCategoryId;
         const matchesSearch =
           !q || p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q);
-        return matchesCat && matchesSearch && matchesReadyStatus(p, readyStatusFilter);
+        return matchesCat && matchesSearch && matchesReadyStatus(p, readyStatusFilter, categories);
       })
-      .sort((a, b) => {
-        // Habis paling atas, lalu hampir habis, lalu tersedia
-        const rank = { out: 0, low: 1, safe: 2 } as const;
-        const diff = rank[getReadyProductStatus(a)] - rank[getReadyProductStatus(b)];
-        return diff !== 0 ? diff : a.name.localeCompare(b.name);
-      });
-  }, [finishedProducts, selectedCategoryId, searchQuery, readyStatusFilter]);
+      .sort((a, b) => a.name.localeCompare(b.name, 'id', { sensitivity: 'base' }));
+  }, [finishedProducts, selectedCategoryId, searchQuery, readyStatusFilter, categories]);
 
   const readyCounts = React.useMemo(() => {
     const inCat = finishedProducts.filter(
@@ -179,11 +169,10 @@ export default function StockPage() {
     );
     return {
       all: inCat.length,
-      available: inCat.filter((p) => matchesReadyStatus(p, 'available')).length,
-      low: inCat.filter((p) => matchesReadyStatus(p, 'low')).length,
-      out: inCat.filter((p) => matchesReadyStatus(p, 'out')).length,
+      low: inCat.filter((p) => p.stock <= getItemMinStock(p, categories)).length,
+      safe: inCat.filter((p) => p.stock > getItemMinStock(p, categories)).length,
     };
-  }, [finishedProducts, selectedCategoryId]);
+  }, [finishedProducts, selectedCategoryId, categories]);
 
   const handleOpenEditProduct = (p: FinishedProduct) => {
     setItemToEdit(p);
@@ -387,30 +376,53 @@ export default function StockPage() {
 
               {/* Status Filter: Bahan (Semua/Kritis/Aman) atau Produk Ready (Semua/Tersedia/Hampir Habis/Habis) */}
               {activeTab === 'products' ? (
-              <div className="sm:col-span-3 grid grid-cols-4 bg-[#FFEBEF]/40 rounded-xl border border-[#F8BBD0] p-1 text-[10px] gap-0.5">
-                {([
-                  { id: 'all', label: 'Semua', active: 'bg-[#C2185B] text-white', idle: 'text-[#8D5B68] hover:text-[#311B1E]' },
-                  { id: 'available', label: 'Tersedia', active: 'bg-emerald-600 text-white', idle: 'text-emerald-700 hover:bg-emerald-50' },
-                  { id: 'low', label: 'Menipis', active: 'bg-amber-500 text-white', idle: 'text-amber-700 hover:bg-amber-50' },
-                  { id: 'out', label: 'Habis', active: 'bg-rose-600 text-white', idle: 'text-rose-700 hover:bg-rose-50' },
-                ] as const).map((f) => (
-                  <button
-                    key={f.id}
-                    id={`ready-filter-${f.id}`}
-                    type="button"
-                    onClick={() => setReadyStatusFilter(f.id)}
-                    title={f.id === 'low' ? 'Hampir Habis (≤ stok minimum)' : undefined}
-                    className={`py-1 rounded-lg font-black transition-all flex flex-col items-center leading-tight ${
-                      readyStatusFilter === f.id ? `${f.active} shadow-2xs` : f.idle
-                    }`}
-                  >
-                    <span className="flex items-center gap-0.5">
-                      {f.id === 'out' && <PackageX className="w-3 h-3" />}
-                      {f.label}
-                    </span>
-                    <span className="opacity-80">{readyCounts[f.id]}</span>
-                  </button>
-                ))}
+              <div className="sm:col-span-3 grid grid-cols-3 bg-[#FFEBEF]/40 rounded-xl border border-[#F8BBD0] p-1 text-[10px] gap-0.5">
+                <button
+                  type="button"
+                  id="ready-filter-all"
+                  onClick={() => setReadyStatusFilter('all')}
+                  className={`py-1 rounded-lg font-black transition-all flex flex-col items-center leading-tight ${
+                    readyStatusFilter === 'all'
+                      ? 'bg-[#C2185B] text-white shadow-2xs'
+                      : 'text-[#8D5B68] hover:text-[#311B1E]'
+                  }`}
+                >
+                  <span>Semua</span>
+                  <span className="opacity-80">{readyCounts.all}</span>
+                </button>
+                <button
+                  type="button"
+                  id="ready-filter-low"
+                  onClick={() => setReadyStatusFilter('low')}
+                  title="Kritis (Stok 0 atau ≤ Batas Kritis Kategori)"
+                  className={`py-1 rounded-lg font-black transition-all flex flex-col items-center leading-tight ${
+                    readyStatusFilter === 'low'
+                      ? 'bg-[#D81B60] text-white shadow-2xs'
+                      : 'text-[#D81B60] hover:bg-rose-50'
+                  }`}
+                >
+                  <span className="flex items-center gap-0.5">
+                    <AlertTriangle className="w-2.5 h-2.5" />
+                    <span>Kritis</span>
+                  </span>
+                  <span className="opacity-80">{readyCounts.low}</span>
+                </button>
+                <button
+                  type="button"
+                  id="ready-filter-safe"
+                  onClick={() => setReadyStatusFilter('safe')}
+                  className={`py-1 rounded-lg font-black transition-all flex flex-col items-center leading-tight ${
+                    readyStatusFilter === 'safe'
+                      ? 'bg-emerald-600 text-white shadow-2xs'
+                      : 'text-emerald-700 hover:bg-emerald-50'
+                  }`}
+                >
+                  <span className="flex items-center gap-0.5">
+                    <CheckCircle2 className="w-2.5 h-2.5" />
+                    <span>Aman</span>
+                  </span>
+                  <span className="opacity-80">{readyCounts.safe}</span>
+                </button>
               </div>
               ) : (
               <div className="sm:col-span-3 grid grid-cols-3 bg-[#FFEBEF]/40 rounded-xl border border-[#F8BBD0] p-1 text-[10px] gap-0.5">

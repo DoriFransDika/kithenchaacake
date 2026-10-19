@@ -4,6 +4,7 @@ import React from 'react';
 import { X, Layers, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { Category, RawMaterial, FinishedProduct } from '@/types';
 import { CategoryIcon } from '@/components/common/CategoryIcon';
+import { getItemMinStock, getCategoryDisplayUnit } from '@/lib/utils';
 
 interface CategoryDetailModalProps {
   isOpen: boolean;
@@ -20,7 +21,14 @@ export function CategoryDetailModal({
   items,
   type,
 }: CategoryDetailModalProps) {
+  const sortedItems = React.useMemo(() => {
+    return [...items].sort((a, b) => a.name.localeCompare(b.name, 'id', { sensitivity: 'base' }));
+  }, [items]);
+
   if (!isOpen || !category) return null;
+
+  const categoryCriticalUnit = getCategoryDisplayUnit(category);
+  const categoryCriticalLimit = category.minStock ?? 5;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/40 backdrop-blur-sm animate-in fade-in duration-200">
@@ -35,12 +43,17 @@ export function CategoryDetailModal({
               <div className="flex items-center gap-2">
                 <h3 className="font-black text-base text-[#311B1E]">Detail Kategori: {category.name}</h3>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white border border-[#F8BBD0] text-[#83274E]">
-                  {type === 'material' ? 'Bahan Baku Dapur' : 'Produk Jadi Ready'}
+                  {type === 'material' ? 'Bahan Baku Dapur' : 'Produk Jadi'}
                 </span>
               </div>
-              <p className="text-xs text-[#83274E] font-medium mt-0.5">
-                Daftar rincian total stok individu per produk ({items.length} item)
-              </p>
+              <div className="flex items-center gap-2 mt-1">
+                <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-rose-50 border border-rose-200 text-rose-700">
+                  Batas Kritis: ≤ {categoryCriticalLimit} {categoryCriticalUnit}
+                </span>
+                <span className="text-xs text-[#83274E] font-medium">
+                  ({sortedItems.length} item varian)
+                </span>
+              </div>
             </div>
           </div>
           <button
@@ -54,25 +67,26 @@ export function CategoryDetailModal({
 
         {/* List of Products / Materials with Individual Stock Counts */}
         <div className="p-5 overflow-y-auto space-y-3 flex-1">
-          {items.length === 0 ? (
+          {sortedItems.length === 0 ? (
             <div className="text-center py-10 text-[#83274E]">
               <Layers className="w-10 h-10 mx-auto text-[#F8BBD0] opacity-70 mb-2" />
               <p className="font-bold text-xs">Belum ada barang dalam kategori ini.</p>
             </div>
           ) : (
             <div className="space-y-2.5">
-              {items.map((item) => {
+              {sortedItems.map((item) => {
+                const minStock = category.minStock ?? getItemMinStock(item, [category]);
                 const isOutOfStock = item.stock <= 0;
-                const isLow = !isOutOfStock && item.stock <= item.minStock;
+                const isLow = !isOutOfStock && item.stock <= minStock;
 
                 return (
                   <div
                     key={item.id}
                     className={`p-3.5 rounded-2xl border transition-all flex items-center justify-between gap-3 ${
                       isOutOfStock
-                        ? 'bg-rose-50/60 border-rose-200'
+                        ? 'bg-rose-50/70 border-rose-300'
                         : isLow
-                        ? 'bg-amber-50/60 border-amber-200'
+                        ? 'bg-amber-50/70 border-amber-200'
                         : 'bg-[#FFEBEF]/25 border-[#F8BBD0]/60'
                     }`}
                   >
@@ -82,14 +96,14 @@ export function CategoryDetailModal({
                           {item.name}
                         </h4>
                         {isOutOfStock ? (
-                          <span className="text-[9px] font-black px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 border border-rose-200 shrink-0 flex items-center gap-1">
+                          <span className="text-[9px] font-black px-2 py-0.5 rounded-full bg-rose-100 text-rose-700 border border-rose-300 shrink-0 flex items-center gap-1">
                             <AlertTriangle className="w-2.5 h-2.5" />
-                            Habis
+                            Kritis (Habis)
                           </span>
                         ) : isLow ? (
                           <span className="text-[9px] font-black px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200 shrink-0 flex items-center gap-1">
                             <AlertTriangle className="w-2.5 h-2.5" />
-                            Kritis
+                            Kritis (Menipis)
                           </span>
                         ) : (
                           <span className="text-[9px] font-black px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200 shrink-0 flex items-center gap-1">
@@ -99,7 +113,7 @@ export function CategoryDetailModal({
                         )}
                       </div>
                       <p className="text-[10px] text-[#83274E] font-medium mt-0.5">
-                        Min. Stok Aman: {item.minStock} {item.unit}
+                        Min: {minStock} {item.unit}
                       </p>
                     </div>
 

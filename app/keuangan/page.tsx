@@ -112,6 +112,12 @@ export default function FinancePage() {
         getTransactionItemName(t, finishedProducts, rawMaterials).toLowerCase().includes(q);
 
       return matchesType && matchesTime && matchesSearch;
+    })
+    .sort((a, b) => {
+      // Urutkan transaksi terbaru di bagian paling atas (latest first)
+      const dateComp = (b.date || '').localeCompare(a.date || '');
+      if (dateComp !== 0) return dateComp;
+      return (b.id || '').localeCompare(a.id || '');
     });
   }, [transactions, filterType, timeRange, productSearchQuery, finishedProducts, rawMaterials]);
 
@@ -173,7 +179,7 @@ export default function FinancePage() {
     const sortedKeys = Array.from(map.keys()).sort((a, b) => (b > a ? 1 : b < a ? -1 : 0));
 
     sortedKeys.forEach((key) => {
-      const items = map.get(key)!;
+      const items = (map.get(key) || []).sort((a, b) => (b.id || '').localeCompare(a.id || ''));
       let displayDate = key;
       try {
         const d = new Date(key);

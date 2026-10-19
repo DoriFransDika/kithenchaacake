@@ -10,6 +10,7 @@ export const INITIAL_CATEGORIES: Category[] = [
     bgColor: 'bg-amber-100',
     textColor: 'text-amber-700',
     description: 'Bahan dasar utama adonan roti (Cakra, Segitiga, Gandum)',
+    minStock: 10,
   },
   {
     id: 'cat-mat-2',
@@ -19,6 +20,7 @@ export const INITIAL_CATEGORIES: Category[] = [
     bgColor: 'bg-rose-100',
     textColor: 'text-rose-600',
     description: 'Lemak nabati, butter Anchor, margarin dan susu bubuk',
+    minStock: 5,
   },
   {
     id: 'cat-mat-3',
@@ -28,6 +30,7 @@ export const INITIAL_CATEGORIES: Category[] = [
     bgColor: 'bg-orange-100',
     textColor: 'text-orange-600',
     description: 'Gula pasir kristal, gula halus donat, dan madu',
+    minStock: 8,
   },
   {
     id: 'cat-mat-4',
@@ -37,6 +40,7 @@ export const INITIAL_CATEGORIES: Category[] = [
     bgColor: 'bg-amber-100',
     textColor: 'text-amber-700',
     description: 'Telur ayam negeri pilihan untuk kelembutan adonan',
+    minStock: 30,
   },
   {
     id: 'cat-mat-5',
@@ -46,6 +50,7 @@ export const INITIAL_CATEGORIES: Category[] = [
     bgColor: 'bg-stone-200',
     textColor: 'text-[#4A3B32]',
     description: 'Meises holland, selai cokelat lumer, dan keju cheddar kraft',
+    minStock: 4,
   },
   {
     id: 'cat-mat-6',
@@ -55,6 +60,7 @@ export const INITIAL_CATEGORIES: Category[] = [
     bgColor: 'bg-purple-100',
     textColor: 'text-purple-600',
     description: 'Ragi instan saf-instant gold dan bread improver',
+    minStock: 5,
   },
   {
     id: 'cat-mat-7',
@@ -64,9 +70,10 @@ export const INITIAL_CATEGORIES: Category[] = [
     bgColor: 'bg-orange-100',
     textColor: 'text-orange-600',
     description: 'Plastik sablon OPP roti dan box karton snack',
+    minStock: 50,
   },
 
-  // Kategori Produk Jadi Roti
+  // Kategori Produk Jadi
   {
     id: 'cat-prod-1',
     name: 'Roti Manis Satuan',
@@ -75,6 +82,7 @@ export const INITIAL_CATEGORIES: Category[] = [
     bgColor: 'bg-rose-100',
     textColor: 'text-rose-600',
     description: 'Roti isi cokelat lumer, keju, srikaya & abon',
+    minStock: 5,
   },
   {
     id: 'cat-prod-2',
@@ -84,6 +92,7 @@ export const INITIAL_CATEGORIES: Category[] = [
     bgColor: 'bg-amber-100',
     textColor: 'text-amber-700',
     description: 'Roti sisir jadul oles mentega gula wangi',
+    minStock: 5,
   },
   {
     id: 'cat-prod-3',
@@ -93,6 +102,7 @@ export const INITIAL_CATEGORIES: Category[] = [
     bgColor: 'bg-orange-100',
     textColor: 'text-orange-600',
     description: 'Roti sobek porsi besar dengan aneka rasa topping',
+    minStock: 3,
   },
   {
     id: 'cat-prod-4',
@@ -102,6 +112,7 @@ export const INITIAL_CATEGORIES: Category[] = [
     bgColor: 'bg-stone-200',
     textColor: 'text-[#4A3B32]',
     description: 'Roti tawar gandum tinggi serat dan tawar kupas',
+    minStock: 4,
   },
   {
     id: 'cat-prod-5',
@@ -111,6 +122,7 @@ export const INITIAL_CATEGORIES: Category[] = [
     bgColor: 'bg-rose-100',
     textColor: 'text-rose-600',
     description: 'Donat kentang empuk tabur gula salju',
+    minStock: 6,
   },
 ];
 

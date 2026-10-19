@@ -5,20 +5,36 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Edit2, Trash2, PackageX, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { Category, FinishedProduct } from '@/types';
 import { CategoryIcon } from '@/components/common/CategoryIcon';
+import { getItemMinStock } from '@/lib/utils';
 
-export type ReadyStatusFilter = 'all' | 'available' | 'low' | 'out';
+export type ReadyStatusFilter = 'all' | 'low' | 'safe' | 'available' | 'out';
 
-export function getReadyProductStatus(p: FinishedProduct): 'out' | 'low' | 'safe' {
+export function getReadyProductStatus(p: FinishedProduct, minStock: number): 'out' | 'low' | 'safe' {
   if (p.stock <= 0) return 'out';
-  if (p.stock <= p.minStock) return 'low';
+  if (p.stock <= minStock) return 'low';
   return 'safe';
 }
 
-export function matchesReadyStatus(p: FinishedProduct, filter: ReadyStatusFilter): boolean {
-  const s = getReadyProductStatus(p);
+export function matchesReadyStatus(
+  p: FinishedProduct,
+  filter: ReadyStatusFilter,
+  categories: Category[] = []
+): boolean {
   if (filter === 'all') return true;
-  if (filter === 'available') return s !== 'out';
-  return s === filter;
+  const minStock = getItemMinStock(p, categories);
+  const status = getReadyProductStatus(p, minStock);
+
+  if (filter === 'low') {
+    // Total gabungan barang yang stoknya 0 maupun yang <= batas kritis
+    return p.stock <= minStock;
+  }
+  if (filter === 'safe' || filter === 'available') {
+    return p.stock > minStock;
+  }
+  if (filter === 'out') {
+    return p.stock <= 0;
+  }
+  return status === filter;
 }
 
 interface ReadyProductListProps {
@@ -31,24 +47,24 @@ interface ReadyProductListProps {
 
 const STATUS_STYLE = {
   out: {
-    card: 'border-rose-300 bg-gradient-to-b from-white to-rose-50/60',
-    badge: 'bg-rose-100 text-rose-700 border-rose-200',
+    card: 'border-rose-400 bg-gradient-to-b from-white to-rose-50/70',
+    badge: 'bg-rose-100 text-rose-700 border-rose-300',
     stock: 'text-rose-600',
-    label: 'Habis',
+    label: 'Kritis (Habis)',
     Icon: PackageX,
   },
   low: {
     card: 'border-amber-300 bg-gradient-to-b from-white to-amber-50/60',
     badge: 'bg-amber-100 text-amber-800 border-amber-200',
     stock: 'text-amber-700',
-    label: 'Hampir Habis',
+    label: 'Kritis (Menipis)',
     Icon: AlertTriangle,
   },
   safe: {
     card: 'border-[#F8BBD0] bg-white/95',
     badge: 'bg-emerald-100 text-emerald-800 border-emerald-200',
     stock: 'text-[#2E7D32]',
-    label: 'Tersedia',
+    label: 'Aman',
     Icon: CheckCircle2,
   },
 } as const;
@@ -77,7 +93,8 @@ export function ReadyProductList({ products, categories, onEdit, onDelete, onAdd
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4">
       <AnimatePresence initial={false}>
         {products.map((p) => {
-          const status = getReadyProductStatus(p);
+          const minStock = getItemMinStock(p, categories);
+          const status = getReadyProductStatus(p, minStock);
           const style = STATUS_STYLE[status];
           const cat = categories.find((c) => c.id === p.categoryId);
 
@@ -132,7 +149,7 @@ export function ReadyProductList({ products, categories, onEdit, onDelete, onAdd
                   <p className={`text-lg sm:text-2xl font-black mt-0.5 ${style.stock}`}>
                     {p.stock} <span className="text-xs font-semibold text-[#8D5B68]">pcs</span>
                   </p>
-                  <span className="text-[9px] text-[#8D5B68] font-semibold">Min. {p.minStock} pcs</span>
+                  <span className="text-[9px] text-[#8D5B68] font-semibold">Min: {minStock} pcs</span>
                 </div>
               </div>
 

@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS public.raw_materials (
     created_at TIMESTAMPTZ DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
--- 3. TABEL PRODUK ROTI JADI (finished_products)
+-- 3. TABEL PRODUK JADI (finished_products)
 CREATE TABLE IF NOT EXISTS public.finished_products (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,

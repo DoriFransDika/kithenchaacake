@@ -116,7 +116,78 @@ export function getCategoryUnitGroup(
 }
 
 export function cleanCategoryDescription(desc?: string): string {
-  return (desc || '').replace(/\s*\[unit:[^\]]+\]/g, '').trim();
+  return (desc || '')
+    .replace(/\s*\[unit:[^\]]+\]/g, '')
+    .replace(/\s*\[min:[^\]]+\]/g, '')
+    .trim();
+}
+
+export function getCategoryCriticalUnit(
+  cat?: { type?: 'material' | 'product'; unitGroup?: UnitGroupType; description?: string; name?: string } | null
+): string {
+  if (!cat || cat.type === 'product') return 'pcs';
+  const grp = getCategoryUnitGroup(cat);
+  if (grp === 'volume') return 'liter';
+  if (grp === 'count') return 'pcs';
+  return 'kg';
+}
+
+/**
+ * Helper terpusat untuk mengambil Batas Kritis (minStock) secara dinamis
+ * dari Kategori Induk sebagai Single Source of Truth.
+ * Cocokkan via categoryId maupun nama category secara case-insensitive.
+ */
+export function getItemMinStock(
+  item: { categoryId?: string; category?: string; minStock?: number } | null | undefined,
+  categories: Array<{ id: string; name: string; minStock?: number; type?: 'material' | 'product'; description?: string }> = []
+): number {
+  if (!item) return 1;
+
+  // 1. Cocokkan berdasarkan categoryId
+  if (item.categoryId) {
+    const matched = categories.find((c) => c.id === item.categoryId);
+    if (matched && matched.minStock !== undefined && matched.minStock !== null && !isNaN(Number(matched.minStock))) {
+      return Number(matched.minStock);
+    }
+    // Cek fallback description jika minStock tersimpan di description
+    if (matched?.description) {
+      const match = matched.description.match(/\[min:(\d+(?:\.\d+)?)\]/);
+      if (match) return Number(match[1]);
+    }
+  }
+
+  // 2. Cocokkan berdasarkan nama category secara case-insensitive
+  if (item.category) {
+    const cleanCat = item.category.trim().toLowerCase();
+    const matched = categories.find((c) => c.name.trim().toLowerCase() === cleanCat);
+    if (matched && matched.minStock !== undefined && matched.minStock !== null && !isNaN(Number(matched.minStock))) {
+      return Number(matched.minStock);
+    }
+    if (matched?.description) {
+      const match = matched.description.match(/\[min:(\d+(?:\.\d+)?)\]/);
+      if (match) return Number(match[1]);
+    }
+  }
+
+  // 3. Fallback ke minStock pada item jika ada dan bernilai valid > 0
+  if (item.minStock !== undefined && item.minStock !== null && !isNaN(Number(item.minStock)) && Number(item.minStock) > 0) {
+    return Number(item.minStock);
+  }
+
+  // 4. Default fallback aman
+  return 1;
+}
+
+/**
+ * Status stok berdasarkan perbandingan stok aktual dan batas kritis
+ * out: stok = 0 (Kritis Habis)
+ * low: 0 < stok <= minStock (Kritis Menipis)
+ * safe: stok > minStock (Aman)
+ */
+export function getItemStockStatus(stock: number, minStock: number): 'out' | 'low' | 'safe' {
+  if (stock <= 0) return 'out';
+  if (stock <= minStock) return 'low';
+  return 'safe';
 }
 
 export function getCategoryDisplayUnit(

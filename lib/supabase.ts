@@ -25,6 +25,8 @@ export interface DbCategory {
   description?: string;
   unit_group?: 'weight' | 'volume' | 'count';
   unitGroup?: 'weight' | 'volume' | 'count';
+  min_stock?: number;
+  minStock?: number;
   created_at?: string;
 }
 
@@ -104,6 +106,16 @@ export interface DbUser {
 // -------------------------------------------------------------
 
 export function mapCategoryFromDb(row: DbCategory): Category {
+  let minStockVal: number | undefined = undefined;
+  if (row.min_stock !== undefined && row.min_stock !== null) {
+    minStockVal = Number(row.min_stock);
+  } else if (row.minStock !== undefined && row.minStock !== null) {
+    minStockVal = Number(row.minStock);
+  } else if (row.description) {
+    const match = row.description.match(/\[min:(\d+(?:\.\d+)?)\]/);
+    if (match) minStockVal = Number(match[1]);
+  }
+
   return {
     id: row.id,
     name: row.name,
@@ -113,6 +125,7 @@ export function mapCategoryFromDb(row: DbCategory): Category {
     textColor: row.text_color || row.textColor || 'text-amber-700',
     description: row.description || '',
     unitGroup: row.unit_group || row.unitGroup || undefined,
+    minStock: minStockVal ?? (row.type === 'material' ? 2 : 5),
   };
 }
 
@@ -126,6 +139,7 @@ export function mapCategoryToDb(cat: Partial<Category>): Record<string, unknown>
   if (cat.textColor !== undefined) result.text_color = cat.textColor;
   if (cat.description !== undefined) result.description = cat.description;
   if (cat.unitGroup !== undefined) result.unit_group = cat.unitGroup;
+  if (cat.minStock !== undefined) result.min_stock = cat.minStock;
   return result;
 }
 

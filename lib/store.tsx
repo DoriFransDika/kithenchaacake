@@ -9,8 +9,10 @@ import {
   ActivityNotification,
   BusinessSummary
 } from '@/types';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Check, AlertTriangle, Info, X } from 'lucide-react';
 import { supabase, supabaseService } from './supabase';
-import { extractTrxMaterialRef, extractTrxProductRef, buildTrxProductRef, formatRupiah } from './utils';
+import { extractTrxMaterialRef, extractTrxProductRef, buildTrxProductRef, formatRupiah, getItemMinStock } from './utils';
 import {
   INITIAL_CATEGORIES,
   INITIAL_RAW_MATERIALS,
@@ -45,6 +47,12 @@ interface UserSession {
 
 export type SupabaseStatus = 'loading' | 'connected' | 'disconnected' | 'needs_setup';
 
+export interface ToastInfo {
+  id: string;
+  message: string;
+  type: 'success' | 'error' | 'info';
+}
+
 interface StoreContextType {
   user: UserSession;
   login: (email: string, pass: string) => Promise<boolean>;
@@ -56,6 +64,9 @@ interface StoreContextType {
   transactions: Transaction[];
   notifications: ActivityNotification[];
   summary: BusinessSummary;
+  // Toast Notification
+  toast: ToastInfo | null;
+  showToast: (message: string, type?: 'success' | 'error' | 'info') => void;
   // Supabase Status & Sync
   supabaseStatus: SupabaseStatus;
   isSupabaseLoading: boolean;
@@ -123,6 +134,19 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [supabaseStatus, setSupabaseStatus] = useState<SupabaseStatus>('loading');
   const [isSupabaseLoading, setIsSupabaseLoading] = useState(false);
+  const [toast, setToast] = useState<ToastInfo | null>(null);
+
+  const showToast = useCallback((message: string, type: 'success' | 'error' | 'info' = 'success') => {
+    const newToast: ToastInfo = {
+      id: `toast-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+      message,
+      type,
+    };
+    setToast(newToast);
+    setTimeout(() => {
+      setToast((curr) => (curr?.id === newToast.id ? null : curr));
+    }, 3500);
+  }, []);
 
   // Sync data directly from Supabase
   const syncWithSupabase = useCallback(async () => {
@@ -432,6 +456,29 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
               prods.map((p) => (p.categoryId === id ? { ...p, category: updated.name! } : p))
             );
           }
+          if (updated.minStock !== undefined) {
+            const newMin = Number(updated.minStock);
+            setRawMaterials((mats) =>
+              mats.map((m) => {
+                if (m.categoryId === id || (c.name && m.category.toLowerCase().trim() === c.name.toLowerCase().trim())) {
+                  const updatedMat = { ...m, minStock: newMin };
+                  supabaseService.updateRawMaterial(m.id, { minStock: newMin }).catch(console.error);
+                  return updatedMat;
+                }
+                return m;
+              })
+            );
+            setFinishedProducts((prods) =>
+              prods.map((p) => {
+                if (p.categoryId === id || (c.name && p.category.toLowerCase().trim() === c.name.toLowerCase().trim())) {
+                  const updatedProd = { ...p, minStock: newMin };
+                  supabaseService.updateFinishedProduct(p.id, { minStock: newMin }).catch(console.error);
+                  return updatedProd;
+                }
+                return p;
+              })
+            );
+          }
           return newCat;
         }
         return c;
@@ -462,7 +509,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
 
     const product = finishedProducts.find((p) => p.id === productId);
     if (!product) {
-      return { success: false, message: 'Produk roti tidak ditemukan!' };
+      return { success: false, message: 'Produk tidak ditemukan!' };
     }
 
     for (const item of product.recipe) {
@@ -533,6 +580,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     if (!mat) return;
 
     const newStock = Number((mat.stock + amount).toFixed(2));
+    const effectiveCost = totalCost > 0 ? totalCost : (mat.costPerUnit > 0 ? Math.round(mat.costPerUnit * amount) : 0);
     const newCostPerUnit = amount > 0 && totalCost > 0 ? Math.round(totalCost / amount) : mat.costPerUnit;
     const today = new Date().toISOString().split('T')[0];
 
@@ -541,25 +589,25 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     );
     supabaseService.updateRawMaterial(materialId, { stock: newStock, costPerUnit: newCostPerUnit, updatedAt: today }).catch(console.error);
 
-    if (totalCost > 0) {
-      const newTrx: Transaction = {
-        id: `trx-${Date.now()}`,
-        date: today,
-        type: 'expense',
-        category: 'Belanja Bahan Baku',
-        amount: totalCost,
-        description: `Belanja Restock ${mat.name} (+${amount} ${mat.unit}) [ref:${materialId}]`,
-        paymentMethod: 'Tunai',
-      };
-      setTransactions((prev) => [newTrx, ...prev]);
-      supabaseService.insertTransaction(newTrx).catch(console.error);
-    }
+    // Requirement 4.3: Setiap restok bahan otomatis mencatat transaksi pengeluaran belanja bahan ke buku kas keuangan
+    const newTrx: Transaction = {
+      id: `trx-${Date.now()}`,
+      date: today,
+      type: 'expense',
+      category: 'Belanja Bahan Baku',
+      amount: effectiveCost,
+      description: `Belanja Restock ${mat.name} (+${amount} ${mat.unit}) [ref:${materialId}]`,
+      paymentMethod: 'Tunai',
+      quantity: `+${amount} ${mat.unit}`,
+    };
+    setTransactions((prev) => [newTrx, ...prev]);
+    supabaseService.insertTransaction(newTrx).catch(console.error);
 
     const newNotif: ActivityNotification = {
       id: `notif-${Date.now()}`,
       type: 'expense',
       title: `Restock Bahan: ${mat.name}`,
-      message: `Stok bertambah +${amount} ${mat.unit}. Total belanja ${formatRupiah(totalCost)}.`,
+      message: `Stok bertambah +${amount} ${mat.unit}. Total belanja ${formatRupiah(effectiveCost)}.`,
       time: 'Baru saja',
       severity: 'info',
     };
@@ -621,15 +669,11 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
 
   const addNewMaterial = (mat: Omit<RawMaterial, 'id' | 'updatedAt'>, totalPurchaseCost?: number) => {
     const today = new Date().toISOString().split('T')[0];
-
     const cleanName = mat.name.trim();
 
-    // Cek apakah sudah ada bahan baku dengan NAMA MEREK yang sama persis dalam kategori ini
+    // Cek apakah sudah ada bahan baku dengan nama merek yang sama persis (case-insensitive) di database
     const existing = rawMaterials.find(
-      (m) =>
-        ((mat.categoryId && m.categoryId === mat.categoryId) ||
-          m.category.toLowerCase().trim() === mat.category.toLowerCase().trim()) &&
-        m.name.toLowerCase().trim() === cleanName.toLowerCase()
+      (m) => m.name.toLowerCase().trim() === cleanName.toLowerCase()
     );
 
     let targetMaterialId = '';
@@ -638,9 +682,15 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       targetMaterialId = existing.id;
       // Akumulasikan stok jika nama merek bahan baku yang sama persis sudah ada
       const updatedStock = Number((Number(existing.stock) + Number(mat.stock)).toFixed(3));
+      const updatedCostPerUnit =
+        totalPurchaseCost && totalPurchaseCost > 0 && Number(mat.stock) > 0
+          ? Math.round(totalPurchaseCost / Number(mat.stock))
+          : existing.costPerUnit;
+
       const updated = {
         ...existing,
         stock: updatedStock,
+        costPerUnit: updatedCostPerUnit,
         updatedAt: today,
       };
 
@@ -649,6 +699,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
       );
       supabaseService.updateRawMaterial(existing.id, {
         stock: updatedStock,
+        costPerUnit: updatedCostPerUnit,
         updatedAt: today,
       }).catch(console.error);
     } else {
@@ -670,37 +721,40 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         ? totalPurchaseCost
         : (mat.costPerUnit || 0) * (mat.stock || 0);
 
-    if (finalCost > 0) {
-      const newTrx: Transaction = {
-        id: `trx-${Date.now()}`,
-        date: today,
-        type: 'expense',
-        category: 'Belanja Bahan Baku',
-        amount: finalCost,
-        description: `Belanja Bahan: ${mat.category}${mat.name ? ` (${mat.name})` : ''} (+${mat.stock} ${mat.unit}) [ref:${targetMaterialId}]`,
-        paymentMethod: 'Tunai',
-        quantity: `+${mat.stock} ${mat.unit}`,
-      };
-      setTransactions((prev) => [newTrx, ...prev]);
-      supabaseService.insertTransaction(newTrx).catch(console.error);
-    }
+    const newTrx: Transaction = {
+      id: `trx-${Date.now()}`,
+      date: today,
+      type: 'expense',
+      category: 'Belanja Bahan Baku',
+      amount: finalCost,
+      description: `Belanja Bahan: ${mat.category}${mat.name ? ` (${mat.name})` : ''} (+${mat.stock} ${mat.unit}) [ref:${targetMaterialId}]`,
+      paymentMethod: 'Tunai',
+      quantity: `+${mat.stock} ${mat.unit}`,
+    };
+    setTransactions((prev) => [newTrx, ...prev]);
+    supabaseService.insertTransaction(newTrx).catch(console.error);
   };
 
   const reduceCategoryStock = (
-    categoryId: string,
+    targetIdentifier: string,
     amountKg: number,
     reason: string
   ): { success: boolean; message: string } => {
+    const cleanTarget = (targetIdentifier || '').toLowerCase().trim();
     const target = rawMaterials.find(
-      (m) => m.categoryId === categoryId || m.category.toLowerCase().trim() === categoryId.toLowerCase().trim()
+      (m) =>
+        m.id === targetIdentifier ||
+        m.categoryId === targetIdentifier ||
+        m.category.toLowerCase().trim() === cleanTarget ||
+        m.name.toLowerCase().trim() === cleanTarget
     );
 
     if (!target) {
-      return { success: false, message: 'Kategori bahan baku tidak ditemukan!' };
+      return { success: false, message: 'Bahan baku atau kategori tidak ditemukan!' };
     }
 
     if (target.stock <= 0) {
-      return { success: false, message: `Stok ${target.category} sudah habis (0 ${target.unit}).` };
+      return { success: false, message: `Stok ${target.name || target.category} sudah habis (0 ${target.unit}).` };
     }
 
     const today = new Date().toISOString().split('T')[0];
@@ -837,19 +891,19 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
     supabaseService.updateFinishedProduct(id, { stock: newStockVal }).catch(console.error);
   };
 
-  // Input Stok Produk Ready: satuan dikunci "pcs", batas warning dikunci 5 pcs. Jika nama + kategori sama sudah ada, stok diakumulasikan.
+  // Input Stok Produk Ready: satuan dikunci "pcs", batas kritis dinamis dari kategori induk. Jika nama barang sudah ada, stok diakumulasikan.
   const addReadyProductStock = (input: ReadyProductInput): { success: boolean; message: string } => {
     const name = input.name.trim();
     const qty = Math.floor(Number(input.stock));
-    const minStock = 5; // Batas warning dikunci di angka 5 pcs
     const cat = categories.find((c) => c.id === input.categoryId && c.type === 'product');
+    const minStock = cat?.minStock ?? 5;
 
     if (!cat) return { success: false, message: 'Pilih kategori produk terlebih dahulu!' };
     if (!name) return { success: false, message: 'Nama produk wajib diisi!' };
     if (!Number.isFinite(qty) || qty <= 0) return { success: false, message: 'Jumlah stok harus berupa angka bulat lebih dari 0!' };
 
     const existing = finishedProducts.find(
-      (p) => p.categoryId === cat.id && p.name.toLowerCase().trim() === name.toLowerCase()
+      (p) => p.name.toLowerCase().trim() === name.toLowerCase()
     );
 
     let resultStock = qty;
@@ -1052,8 +1106,8 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
   const netProfit = totalIncome - totalExpense;
   const readyProductsCount = finishedProducts.reduce((sum, p) => sum + p.stock, 0);
 
-  const lowStockMaterials = rawMaterials.filter((m) => m.stock <= m.minStock).length;
-  const lowStockProducts = finishedProducts.filter((p) => p.stock <= p.minStock).length;
+  const lowStockMaterials = rawMaterials.filter((m) => m.stock <= getItemMinStock(m, categories)).length;
+  const lowStockProducts = finishedProducts.filter((p) => p.stock <= getItemMinStock(p, categories)).length;
   const lowStockItemsCount = lowStockMaterials + lowStockProducts;
 
   const summary: BusinessSummary = {
@@ -1077,6 +1131,8 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         transactions,
         notifications,
         summary,
+        toast,
+        showToast,
         supabaseStatus,
         isSupabaseLoading,
         syncWithSupabase,
@@ -1109,6 +1165,50 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         clearEntireDatabase,
       }}
     >
+      {/* Floating Global Toast Notification */}
+      <AnimatePresence>
+        {toast && (
+          <motion.div
+            key={toast.id}
+            initial={{ opacity: 0, y: -24, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+            className={`fixed top-5 right-4 sm:right-6 z-[99999] flex items-center gap-3 px-4 py-3 rounded-2xl shadow-2xl border backdrop-blur-md max-w-sm sm:max-w-md ${
+              toast.type === 'success'
+                ? 'bg-emerald-950/95 text-emerald-100 border-emerald-500/50 shadow-emerald-950/40'
+                : toast.type === 'error'
+                ? 'bg-rose-950/95 text-rose-100 border-rose-500/50 shadow-rose-950/40'
+                : 'bg-[#311B1E]/95 text-pink-100 border-[#F8BBD0]/50 shadow-pink-950/40'
+            }`}
+          >
+            <div
+              className={`w-7 h-7 rounded-xl flex items-center justify-center shrink-0 ${
+                toast.type === 'success'
+                  ? 'bg-emerald-500/20 text-emerald-400'
+                  : toast.type === 'error'
+                  ? 'bg-rose-500/20 text-rose-400'
+                  : 'bg-[#C2185B]/30 text-pink-300'
+              }`}
+            >
+              {toast.type === 'success' ? (
+                <Check className="w-4 h-4 stroke-[3]" />
+              ) : toast.type === 'error' ? (
+                <AlertTriangle className="w-4 h-4 stroke-[2.5]" />
+              ) : (
+                <Info className="w-4 h-4 stroke-[2.5]" />
+              )}
+            </div>
+            <p className="text-xs font-bold leading-snug flex-1">{toast.message}</p>
+            <button
+              onClick={() => setToast(null)}
+              className="text-white/60 hover:text-white transition-colors p-1"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
       {children}
     </StoreContext.Provider>
   );

@@ -9,6 +9,7 @@ export interface Category {
   textColor: string;
   description?: string;
   unitGroup?: UnitGroup; // 'weight' (kg/gr) | 'volume' (liter/ml) | 'count' (pcs/butir/kaleng/botol/kotak/pack)
+  minStock?: number; // Batas Kritis stok minimum persediaan
 }
 
 export interface RawMaterial {

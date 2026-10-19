@@ -1,11 +1,17 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { X, Check, Boxes, Croissant, AlertTriangle, Lock } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { X, Check, Boxes, Croissant, AlertTriangle, Lock, Sparkles, Layers } from 'lucide-react';
 import { useStore } from '@/lib/store';
 import { Category, RawMaterial, FinishedProduct } from '@/types';
 import { CategoryIcon } from '@/components/common/CategoryIcon';
-import { formatRupiah, getCategoryUnitGroup, UNIT_GROUP_CONFIG, UnitGroupType } from '@/lib/utils';
+import {
+  formatRupiah,
+  getCategoryUnitGroup,
+  UNIT_GROUP_CONFIG,
+  UnitGroupType,
+  getItemMinStock,
+} from '@/lib/utils';
 
 interface ItemModalProps {
   isOpen: boolean;
@@ -16,7 +22,16 @@ interface ItemModalProps {
 }
 
 export function ItemModal({ isOpen, onClose, mode, itemToEdit, onSuccess }: ItemModalProps) {
-  const { categories, finishedProducts, addNewMaterial, updateMaterial, updateProduct, addReadyProductStock } = useStore();
+  const {
+    categories,
+    rawMaterials,
+    finishedProducts,
+    addNewMaterial,
+    updateMaterial,
+    updateProduct,
+    addReadyProductStock,
+    showToast,
+  } = useStore();
 
   const isMaterial = mode === 'material';
   const isEditing = Boolean(itemToEdit);
@@ -31,6 +46,7 @@ export function ItemModal({ isOpen, onClose, mode, itemToEdit, onSuccess }: Item
   const [stock, setStock] = useState<number | string>(1);
   const [minStock, setMinStock] = useState<number | string>(1);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
   // Satuan input dinamis sesuai grup kategori (bahan baku). Produk ready dikunci "pcs".
   const [inputUnit, setInputUnit] = useState<string>('kg');
@@ -43,13 +59,39 @@ export function ItemModal({ isOpen, onClose, mode, itemToEdit, onSuccess }: Item
   const groupConfig = UNIT_GROUP_CONFIG[unitGroup];
   const availableUnits = groupConfig.units;
 
+  // Master Batas Kritis Kategori Induk
+  const parentMinStock = useMemo(() => {
+    return getItemMinStock({ categoryId: currentCategory?.id, category: currentCategory?.name }, categories);
+  }, [currentCategory, categories]);
+
+  // Existing pool for typeahead and duplication check
+  const existingPool = isMaterial ? rawMaterials : finishedProducts;
+  const trimmedName = name.trim().toLowerCase();
+
+  const suggestions = useMemo(() => {
+    if (!trimmedName || isEditing) return [];
+    return existingPool
+      .filter(
+        (item) =>
+          item.name.toLowerCase().includes(trimmedName) &&
+          item.name.toLowerCase().trim() !== trimmedName
+      )
+      .slice(0, 5);
+  }, [existingPool, trimmedName, isEditing]);
+
+  const matchedExisting = useMemo(() => {
+    if (!trimmedName || isEditing) return null;
+    return existingPool.find((item) => item.name.toLowerCase().trim() === trimmedName);
+  }, [existingPool, trimmedName, isEditing]);
+
   useEffect(() => {
     setErrorMsg(null);
+    setShowSuggestions(false);
     if (itemToEdit) {
       setName(itemToEdit.name);
       setCategoryId(itemToEdit.categoryId);
       setStock(itemToEdit.stock);
-      setMinStock(isMaterial ? itemToEdit.minStock : 5);
+      setMinStock(getItemMinStock(itemToEdit, categories));
 
       if ('costPerUnit' in itemToEdit) {
         const cat = categories.find((c) => c.id === itemToEdit.categoryId);
@@ -65,7 +107,7 @@ export function ItemModal({ isOpen, onClose, mode, itemToEdit, onSuccess }: Item
       setName('');
       setCategoryId(initialCat?.id || '');
       setStock(isMaterial ? 1 : '');
-      setMinStock(isMaterial ? 1 : 5);
+      setMinStock(getItemMinStock({ categoryId: initialCat?.id, category: initialCat?.name }, categories));
       setInputUnit(UNIT_GROUP_CONFIG[initialGroup].units[0].id);
       setTotalCost('');
     }
@@ -74,10 +116,6 @@ export function ItemModal({ isOpen, onClose, mode, itemToEdit, onSuccess }: Item
 
   if (!isOpen) return null;
 
-  // Konversi Cerdas Sesuai Grup Satuan:
-  // - Berat: gr -> kg (/ 1000)
-  // - Volume: ml -> liter (/ 1000)
-  // - Unit/Hitung: nilai tetap sesuai satuan pilihan
   const stockNum = Number(stock) || 0;
   const finalStock = stockNum;
   const savedUnit: RawMaterial['unit'] = (inputUnit as RawMaterial['unit']) || 'kg';
@@ -88,6 +126,7 @@ export function ItemModal({ isOpen, onClose, mode, itemToEdit, onSuccess }: Item
     const newGroup = isMaterial ? getCategoryUnitGroup(newCat) : 'count';
     const newUnits = UNIT_GROUP_CONFIG[newGroup].units;
     setInputUnit(newUnits[0].id);
+    setMinStock(getItemMinStock({ categoryId: newCatId, category: newCat?.name }, categories));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -96,6 +135,7 @@ export function ItemModal({ isOpen, onClose, mode, itemToEdit, onSuccess }: Item
     setErrorMsg(null);
     const catObj = availableCategories.find((c) => c.id === categoryId) || availableCategories[0];
     const categoryName = catObj ? catObj.name : (isMaterial ? 'Tepung & Gandum' : 'Roti Manis');
+    const masterMin = getItemMinStock({ categoryId: catObj?.id, category: categoryName }, categories);
 
     if (isMaterial) {
       if (!name.trim()) {
@@ -117,10 +157,12 @@ export function ItemModal({ isOpen, onClose, mode, itemToEdit, onSuccess }: Item
           category: categoryName,
           categoryId: catObj?.id || categoryId,
           stock: finalStock,
-          minStock: Number(minStock) || 1,
+          minStock: masterMin,
           unit: savedUnit,
           costPerUnit: calculatedCostPerUnit,
         });
+        showToast(`Bahan baku ${name.trim()} berhasil diperbarui.`);
+        onSuccess?.(`Bahan baku ${name.trim()} berhasil diperbarui.`);
       } else {
         addNewMaterial(
           {
@@ -128,17 +170,21 @@ export function ItemModal({ isOpen, onClose, mode, itemToEdit, onSuccess }: Item
             category: categoryName,
             categoryId: catObj?.id || categoryId,
             stock: finalStock,
-            minStock: Number(minStock) || 1,
+            minStock: masterMin,
             unit: savedUnit,
             costPerUnit: calculatedCostPerUnit,
           },
           parsedTotalCost
         );
+        const successMsg = matchedExisting
+          ? `Stok ${matchedExisting.name} berhasil diakumulasikan (+${finalStock} ${savedUnit}).`
+          : `Bahan baku ${name.trim()} berhasil ditambahkan ke persediaan.`;
+        showToast(successMsg);
+        onSuccess?.(successMsg);
       }
     } else {
-      // ===== PRODUK READY: satuan dikunci "pcs", batas warning otomatis dikunci 5 pcs =====
+      // ===== PRODUK JADI: satuan dikunci "pcs", batas kritis master kategori =====
       const qty = Number(stock);
-      const min = 5; // Batas warning dikunci di 5 pcs
       if (!catObj) {
         setErrorMsg('Belum ada kategori produk. Buat dulu di menu Kelola Kategori.');
         return;
@@ -153,31 +199,23 @@ export function ItemModal({ isOpen, onClose, mode, itemToEdit, onSuccess }: Item
       }
 
       if (isEditing && itemToEdit) {
-        const duplicate = finishedProducts.find(
-          (p) =>
-            p.id !== itemToEdit.id &&
-            p.categoryId === catObj.id &&
-            p.name.toLowerCase().trim() === name.trim().toLowerCase()
-        );
-        if (duplicate) {
-          setErrorMsg(`Produk "${duplicate.name}" sudah ada di kategori ${catObj.name}.`);
-          return;
-        }
         updateProduct(itemToEdit.id, {
           name: name.trim(),
           category: catObj.name,
           categoryId: catObj.id,
           stock: qty,
-          minStock: 5,
+          minStock: masterMin,
           unit: 'pcs',
         });
+        showToast(`Produk ${name.trim()} berhasil diperbarui.`);
         onSuccess?.(`Produk ${name.trim()} berhasil diperbarui.`);
       } else {
-        const res = addReadyProductStock({ categoryId: catObj.id, name, stock: qty, minStock: 5 });
+        const res = addReadyProductStock({ categoryId: catObj.id, name: name.trim(), stock: qty, minStock: masterMin });
         if (!res.success) {
           setErrorMsg(res.message);
           return;
         }
+        showToast(res.message);
         onSuccess?.(res.message);
       }
     }
@@ -248,8 +286,8 @@ export function ItemModal({ isOpen, onClose, mode, itemToEdit, onSuccess }: Item
             )}
           </div>
 
-          {/* Nama Merek / Barang */}
-          <div>
+          {/* Nama Merek / Barang dengan Auto-Suggestion */}
+          <div className="relative">
             <label className="block text-xs font-black text-[#311B1E] mb-1.5 flex items-center justify-between">
               <span>{isMaterial ? 'Nama Merek / Bahan' : 'Nama Produk'} <span className="text-rose-600">*</span></span>
               {isMaterial && (
@@ -260,10 +298,68 @@ export function ItemModal({ isOpen, onClose, mode, itemToEdit, onSuccess }: Item
               type="text"
               required
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => {
+                setName(e.target.value);
+                setShowSuggestions(true);
+              }}
+              onFocus={() => setShowSuggestions(true)}
+              onBlur={() => {
+                setTimeout(() => setShowSuggestions(false), 200);
+              }}
               placeholder={isMaterial ? 'Contoh: Tepung Segitiga Biru, Ragi Saf-Instant' : 'Contoh: Roti Coklat Keju'}
               className="w-full bg-[#FFEBEF]/40 border-2 border-[#F8BBD0] focus:border-[#C2185B] rounded-2xl px-4 py-2.5 text-xs text-[#311B1E] font-bold focus:outline-none placeholder-[#8D5B68]"
             />
+
+            {/* Dropdown Rekomendasi Nama yang Sudah Ada (Typeahead) */}
+            {showSuggestions && suggestions.length > 0 && (
+              <div className="absolute z-30 left-0 right-0 mt-1 bg-white border-2 border-[#F8BBD0] rounded-2xl shadow-xl overflow-hidden py-1 max-h-48 overflow-y-auto">
+                <div className="px-3 py-1.5 text-[10px] font-black text-[#8D5B68] uppercase tracking-wider bg-[#FFEBEF]/60 border-b border-[#F8BBD0]/60 flex items-center justify-between">
+                  <span>Saran Barang Database</span>
+                  <span className="text-[9px] font-normal lowercase">(klik untuk pilih)</span>
+                </div>
+                {suggestions.map((s) => (
+                  <button
+                    key={s.id}
+                    type="button"
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      setName(s.name);
+                      if (s.categoryId) setCategoryId(s.categoryId);
+                      if ('unit' in s && s.unit && isMaterial) setInputUnit(s.unit);
+                      setShowSuggestions(false);
+                    }}
+                    className="w-full px-3 py-2 text-left hover:bg-[#FFEBEF]/70 flex items-center justify-between text-xs transition-colors border-b border-stone-50 last:border-b-0"
+                  >
+                    <span className="font-black text-[#311B1E] truncate">{s.name}</span>
+                    <span className="text-[10px] text-[#C2185B] font-bold bg-[#FFEBEF] border border-[#F8BBD0] px-2 py-0.5 rounded-full shrink-0 ml-2">
+                      Stok: {s.stock} {s.unit}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Indikator Ramah: Akumulasi Otomatis Terdeteksi */}
+          {matchedExisting && (
+            <div className="p-3 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-300 text-amber-900 text-xs font-bold flex items-start gap-2 shadow-xs animate-in fade-in">
+              <Sparkles className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+              <div className="leading-relaxed">
+                <span className="font-black text-amber-950 block">Barang sudah ada di persediaan!</span>
+                <span className="text-[11px] text-amber-900">
+                  Sisa stok aktif saat ini: <strong>{matchedExisting.stock} {matchedExisting.unit}</strong>.
+                  Menambahkan stok di sini akan otomatis mengakumulasikan jumlah stok yang diinput ke stok aktif tanpa membuat duplikat baru.
+                </span>
+              </div>
+            </div>
+          )}
+
+          {/* Badge Indikator Batas Kritis Master Kategori */}
+          <div className="px-3 py-2 rounded-xl bg-stone-50 border border-stone-200 flex items-center justify-between text-xs">
+            <span className="text-[11px] text-[#8D5B68] font-bold">Batas Kritis Master Kategori:</span>
+            <span className="text-[11px] font-black text-rose-700 bg-rose-50 border border-rose-200 px-2 py-0.5 rounded-lg">
+              ≤ {parentMinStock} {isMaterial ? inputUnit : 'pcs'}
+            </span>
           </div>
 
           {/* Stok Awal & Satuan */}

@@ -23,7 +23,7 @@ export function ReduceStockModal({
   initialMaterialId,
   initialMaterialName,
 }: ReduceStockModalProps) {
-  const { categories, rawMaterials, reduceCategoryStock } = useStore();
+  const { categories, rawMaterials, reduceCategoryStock, showToast } = useStore();
 
   const materialCategories = categories.filter((c) => c.type === 'material');
 
@@ -121,6 +121,7 @@ export function ReduceStockModal({
     );
 
     if (res.success) {
+      showToast(res.message);
       onClose();
     } else {
       setErrorMsg(res.message);

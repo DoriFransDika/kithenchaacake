@@ -5,11 +5,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Boxes, Edit2, Trash2, PackageX, AlertTriangle, CheckCircle2, Minus } from 'lucide-react';
 import { Category, RawMaterial } from '@/types';
 import { CategoryIcon } from '@/components/common/CategoryIcon';
-import { formatRupiah } from '@/lib/utils';
+import { formatRupiah, getItemMinStock } from '@/lib/utils';
 
-export function getMaterialStatus(m: RawMaterial): 'out' | 'low' | 'safe' {
+export function getMaterialStatus(m: RawMaterial, minStock: number): 'out' | 'low' | 'safe' {
   if (m.stock <= 0) return 'out';
-  if (m.stock <= m.minStock) return 'low';
+  if (m.stock <= minStock) return 'low';
   return 'safe';
 }
 
@@ -24,22 +24,22 @@ interface MaterialListProps {
 
 const STATUS_STYLE = {
   out: {
-    card: 'border-rose-300 bg-gradient-to-b from-white to-rose-50/60',
-    badge: 'bg-rose-100 text-rose-700 border-rose-200',
+    card: 'border-rose-400 bg-gradient-to-b from-white to-rose-50/70',
+    badge: 'bg-rose-100 text-rose-700 border-rose-300 font-black',
     stock: 'text-rose-600',
-    label: 'Habis',
+    label: 'Kritis (Habis)',
     Icon: PackageX,
   },
   low: {
     card: 'border-amber-300 bg-gradient-to-b from-white to-amber-50/60',
-    badge: 'bg-amber-100 text-amber-800 border-amber-200',
+    badge: 'bg-amber-100 text-amber-800 border-amber-200 font-black',
     stock: 'text-amber-700',
-    label: 'Kritis',
+    label: 'Kritis (Menipis)',
     Icon: AlertTriangle,
   },
   safe: {
     card: 'border-[#F8BBD0] bg-white/95',
-    badge: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+    badge: 'bg-emerald-100 text-emerald-800 border-emerald-200 font-black',
     stock: 'text-[#2E7D32]',
     label: 'Aman',
     Icon: CheckCircle2,
@@ -77,7 +77,8 @@ export function MaterialList({
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4">
       <AnimatePresence initial={false}>
         {materials.map((m) => {
-          const status = getMaterialStatus(m);
+          const minStock = getItemMinStock(m, categories);
+          const status = getMaterialStatus(m, minStock);
           const style = STATUS_STYLE[status];
           const cat = categories.find((c) => c.id === m.categoryId);
 
@@ -141,7 +142,7 @@ export function MaterialList({
                     {style.label}
                   </span>
                   <span className="text-[#8D5B68] font-medium text-[9px] sm:text-[10px]">
-                    Min: {m.minStock} {m.unit}
+                    Min: {minStock} {m.unit}
                   </span>
                 </div>
 

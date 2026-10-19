@@ -84,7 +84,7 @@ export default function CalculatorPage() {
               {/* Pilihan Kategori Produk (Opsional) */}
               <div>
                 <label className="block text-xs font-black text-[#311B1E] mb-1.5">
-                  Kategori Produk Roti <span className="text-[10px] text-[#8D5B68] font-normal">(Opsional)</span>
+                  Kategori Produk Jadi <span className="text-[10px] text-[#8D5B68] font-normal">(Opsional)</span>
                 </label>
                 <div className="relative">
                   <select
@@ -92,7 +92,7 @@ export default function CalculatorPage() {
                     onChange={(e) => setSelectedCategory(e.target.value)}
                     className="w-full bg-[#FFEBEF]/40 border-2 border-[#F8BBD0] focus:border-[#C2185B] rounded-2xl px-4 py-2.5 text-xs text-[#311B1E] font-bold focus:outline-none appearance-none"
                   >
-                    <option value="">-- Pilih Kategori Roti (Boleh Kosong) --</option>
+                    <option value="">-- Pilih Kategori Produk Jadi (Boleh Kosong) --</option>
                     {productCategories.map((c) => (
                       <option key={c.id} value={c.name}>
                         {c.name}
