@@ -17,6 +17,14 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'Kitchen Chaacake Management System | Bakery & Cake OS',
   description: 'Sistem pencatatan produksi resep, stok bahan baku, dan pembukuan keuangan toko kue Kitchen Chaacake.',
+  icons: {
+    icon: [
+      { url: '/logo.jpeg', type: 'image/jpeg' },
+      { url: '/favicon.ico', sizes: 'any' },
+    ],
+    shortcut: '/logo.jpeg',
+    apple: '/logo.jpeg',
+  },
 };
 
 export default function RootLayout({
